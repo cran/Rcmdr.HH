@@ -1,0 +1,37 @@
+Sorry for my tardy replies.  I'm busy prepping GenEd-QL62.  If this
+course works out, you will teach it next year and be busy with it.
+
+On Monday you wrote me
+
+You can download and install Rcmdr.HH_1.3.zip on R-2.4.1 from
+    http://astro.ocis.temple.edu/~rmh/HH/Rcmdr.HH_1.3.zip
+
+but you don't say how to do the installation from here.  This may
+relate to the e-mail you sent last night to Erich.
+
+Next I react to HH-R.package/Rcmdr.HH/cmts/rmh010507b, numbers
+referring to bholland.121606
+
+>Confirm that I have 7 correctly interpreted.
+Yes.
+
+>Propose menu appearances for numbers 5 and 6.   
+
+What you are proposing with stuff like number of level(ABCD | group1)
+is overly complicated for Stat 22.  Please use as a guide the
+appearance of the Minitab Student Edition menus for working the same
+test.  For example, consider Keller's Xr13-109.xls.  This example has
+2=yes and 1=no and wants a one-sided test comparing the proportion of
+1's.  In Minitab and click Stat, Basic Statistics, 2 Proportions,
+Options: Alternative = greater than.  Minitab's output pays attention
+to which is population 1 and which is population 2, by saying "Event =
+2", telling the user that it is comparing the proportion of 2's.  This
+is crucial info of the sort that Rcmdr didn't give in F06 and was a
+problem using Rcmdr for Chapter 13.  Keller's question is "Can we
+infer that New Yorkers are more likely to respond no than
+Californians?"  Just flip this to "Can we infer that New Yorkers are
+less likely to respond yes than Californians?" and Minitab has
+answered it.  The goal is to make Rcmdr work as smoothly as Minitab in
+tasks both can do.
+
+

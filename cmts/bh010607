@@ -1,0 +1,32 @@
+bh comments to rmh010506b keyed to numbers in bholland.121606
+
+0.  I've been in touch with Erich and he has given me some good advice
+on Vienna.
+
+1.  Users of Student Minitab in Stat 22 don't use ANY command
+language.  That's our goal for Rcmdr for Stat 22.  Reshape might be a
+better candidate for a menu provided we don't need to discuss more
+than 2 or 3 of its arguments.
+
+2.  Would some additional fill-in-the-blank boxes on the right for cex
+and perhaps some others be what you want?  Yes
+
+3.  Currently I do stuff in the command window like
+
+predict(RegModel.1, newdata=data.frame(Odometer=40000), interval="confidence")
+
+This is a model for car price as a function of Odometer.  If I had a
+second predictor, Age, I have to revise in the command window to
+(Odometer=40000, Age=4).  I want to do all of this stuff by clicking
+given a model that contains Price, Odometer and Age.  For multiple
+regression, I'm not interested in a CI or PI plot, only the numerical
+interval.
+
+4.  The scatterplot menu has an "identify points" checkbox.  Is that what
+you want?
+
+Yes.  Currently this checkbox simply gives the case number.  I want it
+to be able to give it state or country abbreviations if such a
+non-numerical variable is in the dataset.
+
+

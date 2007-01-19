@@ -1,0 +1,67 @@
+Date: Mon 22 Jan 15:05:04 EST 2007
+From: Erich Neuwirth <erich.neuwirth@univie.ac.at> Add To Address Book | This is Spam 
+Subject: Re: interface session 
+To: "Richard M. Heiberger" <rmh@temple.edu> 
+
+
+Richard M. Heiberger wrote:
+> Please comment.  I haven't tried it out on Burt or Alan yet.
+> Nor have I spoken to the other two potential speakers.
+> 
+> 
+> Menu Systems for Scientists
+> 
+> Biologists collect data.  Statisticians design and execute analyses.
+> Communication of data and results between the two groups needs to be
+> in a form as close as possible to the style in which the biologist is
+> comfortable.  Many scientists store their data in spreadsheets and
+> would like the results of their analyses in the same format.  Data in
+> this setting can be as simple as numbers or as complex as URL's into a
+> library of JPEG files.  A good interface between a data storage
+and manipulation
+> mechanism such as Excel and a data analysis system is a menu 
+
+(preferrably)
+
+on the
+> spreadsheet menu bar that generates arbitrarily complex calls to
+> sophisticated analyses written in R or S-Plus or SAS.
+and puts the results on the spreadsheet
+
+
+> 
+> 
+> 1. John Fox, McMaster University
+> 
+> Design of menu systems for access to functions written in R
+> 
+> 
+> 2. Erich Neuwirth, University of Vienna
+> and Thomas Baier, University of Technology, Vienna
+> 
+> Use of the RExcel interface to place R menus 
+to create Excel menus
+
+
+> 
+> 
+> 3. Narasimhan Balasubramanian, Stanford University
+> 
+> Distribution of Microarray Analysis Results.
+> 
+> 
+> 4. Bob Gagnon, GSK
+> 
+> Distribution using Excel of Gene analysis graphics drawn in S-Plus
+> from data and analyses in SAS.
+> 
+> 
+> 
+
+
+-- 
+Erich Neuwirth, University of Vienna
+Faculty of Computer Science
+Computer Supported Didactics Working Group
+Visit our SunSITE at http://sunsite.univie.ac.at
+Phone: +43-1-4277-39464 Fax: +43-1-4277-39459

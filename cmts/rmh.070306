@@ -1,0 +1,31 @@
+Reply to Rcmdr.070206
+
+> I no longer see Best Subsets Regression in the menu system.
+It is there:  Statistics/Fit/Best
+
+> Accept variable names containing embedded blanks (Rich tells me you added
+>  that feature this spring.  We froze our class use and labs to the
+>  January version.)
+This has been repaired in both Rcmdr 1.1-7 and in the latest RExcel.
+You probably have outdated versions of both.
+
+> Get ability to start Rcmdr.HH via menu clicking, not from R Console.  
+Two options, both in the short-term future.
+a. HH stuff is included of the official Rcmdr.
+b. We get Erich to change RExcel to add Rcmdr.HH as an option
+   in addition to Rcmdr.
+Some variant of b is the right way I think.
+
+> For a two-way or higher-way anova, produce an interaction plot, 
+>  preferably, one resembling HH's interaction2wt().  (Rich says he
+> can do this.)
+I included interaction2wt.  "It is on Graphs/Plot of two-way interactions..."
+
+> This would be okay.  A disadvantage is that if I change my mind about
+> the ordering as I'm clicking, I'd have to cancel and start over.
+Not a problem.  As long as you are in the middle of clicking
+"Statistics/Fit models/Linear model...", you are constructing a
+statement in the menu system.  You can edit it before clicking ok.
+
+The other stuff is easy.  I should be able to do it in July along with
+packaging HH.

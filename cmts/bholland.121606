@@ -1,0 +1,36 @@
+Date: Sat 16 Dec 21:16:21 EST 2006
+From: <bholland@temple.edu> Add To Address Book | This is Spam 
+Subject: list of needed additions to f06 version of Rcmdr 
+To: rmh@temple.edu 
+
+
+Here is a list of needed additions to the version of Rcmdr I used in f06.
+
+1.  Ability to stack columns without using command language.
+2.  Ability to control cex in scatterplots and sploms without using command
+    language.
+3.  Ability to produce CI's  and PI's in multiple regression without using
+    command language.
+4.  Ability to label points on a scatterplot with more than just case number.
+    For example, if there is a column containing two letter state 
+    abbreviations, label the states.  For Olympic data where each case is a
+    country, label each point with a short country abbreviation.
+5.  When inferring about a single population proportion p, provide the 
+    ability to specify which of the two categories relate to p (as opposed
+    to 1-p).  In Keller, sometimes yes-no is coded 1-2 and at other times 
+    is coded 2-1.
+6.  When inferring about two proportions, it is assumed the direction of
+    difference between the proportions is leftmost column minus rightmost
+    column.  If students examine output rather than generate it from an
+    xls, the direction needs to be made clearer in the output.
+7.  When analyzing two-dimensional contingency tables, I want the output
+    in this order:  a table of observed frequencies, a table of expected
+    frequencies assuming the two dimensions are independent, and a table
+    of cell contributions to chi-square.  Currently, the table of 
+    expected frequencies is last.  Also, on the click menu, make the
+    expected frequencies higher on the list than cell chi-square.
+8.  When viewing a data set (click on View data set), allow for control of
+    number of digits used for certain entries.  
+9.  In Best Subsets Regression (HH) output, add an additional column for
+    Standard Error of Estimate as a criterion.  Also enable the plot and
+    selection of best models to be according to this criterion.

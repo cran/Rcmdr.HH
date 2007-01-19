@@ -1,0 +1,19 @@
+1. Commander() has changed.  I have to figure out how to get it to use
+my menu and match that technique.
+DONE!
+
+
+2. Spurious warning from R CMD check without telling where it comes from:
+In R, the argument of a replacement function which corresponds to the right
+hand side must be named 'value'.
+
+I trace it to the line
+              if (length(grep("<-", current.line)) > 0){
+  -rwxrwxrwx+ 1 rmh mkpasswd 24341 Jan  7 21:47 Commander.HH.R
+which is not a function definition.
+
+I changed that line to
+            if (length(grep('<-', current.line)) > 0){
+but it didn't help.
+
+I eventually dropped the duplicate Commander and the problem went away.

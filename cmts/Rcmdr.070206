@@ -1,0 +1,54 @@
+Rich,
+
+Below is the wish list I sent to John Fox in May.  I could accomplish
+almost none of this via menu clicking in Rcmdr.HH.  In addition:
+
+Identify points in a scatterplot not just by case id but also by
+a qualitative variable already in the dataset, such as a two letter
+state abbreviation.  
+
+I no longer see Best Subsets Regression in the menu system.
+
+Get ability to start Rcmdr.HH via menu clicking, not from R Console.  
+
+Become able to start Rcmdr.HH commands from Excel's R Excel menu.
+Ultimately, I'd like to get all of Rcmdr.HH's commands into Excel's
+menu.
+
+Burt
+
+Control size of plot points and their appearance (filled in circle)
+Control sizes of labels
+Easily being able to label plot points according to an unplotted variable
+ in all plots including 3-D
+Accept variable names containing embedded blanks (Rich tells me you added
+ that feature this spring.  We froze our class use and labs to the
+ January version.)
+Stack or unstack columns
+In regression, plot standardized residuals vs any predictor from the
+ regression diagnostics menu. (I know how to do this by adding residuals
+ to the data.frame and then using the scatterplot.matrix.)
+In regression diagnostics (observation statistics), flag standardized 
+ residuals with magnitude exceeding 2.
+In regression diagnostics (observation statistics), flag hat-values 
+ exceeding 2(p+1)/n
+In regression, allow user control over the ordering of predictor 
+ variables.  Currently they are placed in alphabetical order.  (Rich
+ suggests typing a number next to the variable names in the menu.)
+For a two-way or higher-way anova, produce an interaction plot, 
+ preferably, one resembling HH's interaction2wt().  (Rich says he
+ can do this.)
+
+Burt:
+> In regression, allow user control over the ordering of predictor 
+>  variables.  Currently they are placed in alphabetical order.  (Rich
+>  suggests typing a number next to the variable names in the menu.)
+
+John Fox:
+Why not just use the linear-model dialog, just clicking on the
+variables in the order that you want them in the model? Isn't that less
+cumbersome?
+
+Burt:
+This would be okay.  A disadvantage is that if I change my mind about
+the ordering as I'm clicking, I'd have to cancel and start over.

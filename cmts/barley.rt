@@ -1,0 +1,942 @@
+
+> data(US.pop, package="car")
+
+> data(Florida, package="car")
+
+> showData(Florida, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> data(barley, package="lattice")
+
+> showData(barley, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> showData(US.pop, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> showData(Xm12.5, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> showData(US.pop, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> data(Prestige, package="car")
+
+> showData(Prestige, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> Subsets.1 <- regsubsets(prestige~census+education+income, data=Prestige, nbest=2)
+
+> summary.HH(Subsets.1, statistic='adjr2')
+  models p   rsq   rss adjr2     cp    bic
+1      e 2 0.723  8287 0.720  38.08 -121.6
+2      i 2 0.511 14616 0.506 142.02  -63.7
+3    e-i 3 0.798  6039 0.794   3.17 -149.3
+4    c-e 3 0.736  7892 0.731  33.60 -122.0
+5  c-e-i 4 0.800  5968 0.794   4.00 -145.9
+
+attr(,"abbrevs")
+          abbrevs
+census          c
+education       e
+income          i
+
+attr(,"n.max.adjr2")
+[1] 5
+
+> subsets.HH(Subsets.1, statistic='adjr2', legend=FALSE)
+
+> RegModel.1.5 <- lm.regsubsets(Subsets.1, 5)  ## subset 5 has largest adjr2
+
+> summary(RegModel.1.5)
+
+Call:
+lm(formula = prestige ~ census + education + income, data = Prestige)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-19.04123  -5.23924  -0.06776   5.10017  18.51715 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -1.507e+01  8.266e+00  -1.824   0.0713 .  
+census       5.762e-04  5.334e-04   1.080   0.2827    
+education    4.653e+00  5.907e-01   7.876 4.66e-12 ***
+income       1.300e-03  2.312e-04   5.622 1.78e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Residual standard error: 7.804 on 98 degrees of freedom
+Multiple R-Squared: 0.8004,	Adjusted R-squared: 0.7943 
+F-statistic:   131 on 3 and 98 DF,  p-value: < 2.2e-16 
+
+
+> data()
+
+> Xr13.119 <- sqlQuery(channel = 3, select * from [Sheet1$])
+
+> names(Xr13.119) <- make.names(names(Xr13.119))
+[1] "X.100.Limit"  "X.3000.Limit"
+
+> showData(Xr13.119, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> Xr13.119$X.100.Limit <- factor(Xr13.119$X.100.Limit, labels=c('dealer-won','dealer-lost'))
+
+> Xr13.119$X.3000.Limit <- factor(Xr13.119$X.3000.Limit, labels=c('dealer-won','dealer-lost'))
+
+> showData(Xr13.119, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> Xr13.119 <- sqlQuery(channel = 3, select * from [Sheet1$])
+
+> names(Xr13.119) <- make.names(names(Xr13.119))
+
+> channel <- odbcConnect("C:/HOME/stat/Data/Keller6Abrev/Manual Install/Keller6/Keller Datasets/Excel/CH12")
+
+> channel <- odbcConnect("C:/HOME/stat/Data/Keller6Abrev/Manual Install/Keller6/Keller Datasets/Excel/CH12/Xr13-119.xls")
+
+> channel <- odbcConnect("C:/HOME/stat/Data/Keller6Abrev/Manual~1/Keller6/Keller~1/Excel/CH12/Xr13-119.xls")
+
+> X13.119 <- sqlQuery(channel = 7, select * from [Sheet1$])
+
+> names(X13.119) <- make.names(names(X13.119))
+[1] "X.100.Limit"  "X.3000.Limit"
+
+> StackedData <- stack(X13.119[, c("X.100.Limit","X.3000.Limit")])
+
+> names(StackedData) <- c("dealer", "limit")
+
+> StackedData$dealer <- factor(StackedData$dealer, labels=c('lost','won'))
+
+> showData(StackedData, placement='-20+200', font=getRcmdr('logFont'), maxwidth=80, maxheight=30)
+
+> .Table <- table(StackedData$dealer)
+
+> .Table  # counts for dealer
+
+lost  won 
+ 452  529 
+
+> 100*.Table/sum(.Table)  # percentages for dealer
+
+    lost      won 
+46.07543 53.92457 
+
+> .Table <- table(StackedData$limit)
+
+> .Table  # counts for limit
+
+ X.100.Limit X.3000.Limit 
+         491          491 
+
+> 100*.Table/sum(.Table)  # percentages for limit
+
+ X.100.Limit X.3000.Limit 
+          50           50 
+
+> remove(.Table)
+
+> .Table <- xtabs(~limit+dealer, data=StackedData)
+
+> rowPercents(.Table)
+              dealer
+limit          lost  won Total Count
+  X.100.Limit  47.7 52.3   100   491
+  X.3000.Limit 44.5 55.5   100   490
+
+> prop.test(.Table, alternative='two.sided', conf.level=.95, correct=FALSE)
+
+	2-sample test for equality of proportions without continuity
+	correction
+
+data:  .Table 
+X-squared = 0.9907, df = 1, p-value = 0.3196
+alternative hypothesis: two.sided 
+95 percent confidence interval:
+ -0.03067153  0.09403243 
+sample estimates:
+   prop 1    prop 2 
+0.4765784 0.4448980 
+
+
+> remove(.Table)
+
+> .Anova <- lm(yield ~ site, data=barley)
+
+> anova(.Anova)
+Analysis of Variance Table
+
+Response: yield
+           Df Sum Sq Mean Sq F value    Pr(>F)    
+site        5 6633.9  1326.8  24.893 < 2.2e-16 ***
+Residuals 114 6076.1    53.3                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+> tapply(barley$yield, barley$site, mean, na.rm=TRUE) # means
+   Grand Rapids          Duluth University Farm          Morris       Crookston 
+       24.93167        27.99667        32.66667        35.40000        37.42000 
+         Waseca 
+       48.10833 
+
+> tapply(barley$yield, barley$site, sd, na.rm=TRUE) # std. deviations
+   Grand Rapids          Duluth University Farm          Morris       Crookston 
+       6.598109        4.037034        6.159344        8.186352        8.089373 
+         Waseca 
+       9.464096 
+
+> tapply(barley$yield, barley$site, function(x) sum(!is.na(x))) # counts
+   Grand Rapids          Duluth University Farm          Morris       Crookston 
+             20              20              20              20              20 
+         Waseca 
+             20 
+
+> remove(.Anova)
+
+> .Anova <- lm(yield ~ variety, data=barley)
+
+> anova(.Anova)
+Analysis of Variance Table
+
+Response: yield
+           Df  Sum Sq Mean Sq F value Pr(>F)
+variety     9  1052.6   117.0  1.1036 0.3663
+Residuals 110 11657.4   106.0               
+
+> tapply(barley$yield, barley$variety, mean, na.rm=TRUE) # means
+        Svansota          No. 462        Manchuria          No. 475 
+        30.37778         35.37778         31.46389         31.76111 
+          Velvet         Peatland          Glabron          No. 457 
+        33.06111         34.18056         33.34167         35.84722 
+Wisconsin No. 38            Trebi 
+        39.39445         39.39999 
+
+> tapply(barley$yield, barley$variety, sd, na.rm=TRUE) # std. deviations
+        Svansota          No. 462        Manchuria          No. 475 
+        9.055646        13.595439         7.513617        10.446737 
+          Velvet         Peatland          Glabron          No. 457 
+        8.579100         7.088664        10.210542        11.069427 
+Wisconsin No. 38            Trebi 
+       11.865780        11.657459 
+
+> tapply(barley$yield, barley$variety, function(x) sum(!is.na(x))) # counts
+        Svansota          No. 462        Manchuria          No. 475 
+              12               12               12               12 
+          Velvet         Peatland          Glabron          No. 457 
+              12               12               12               12 
+Wisconsin No. 38            Trebi 
+              12               12 
+
+> .Pairs <- glht(.Anova, linfct = mcp(variety = "Tukey"))
+
+> confint(.Pairs)
+
+	 Simultaneous Confidence Intervals for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = yield ~ variety, data = barley)
+
+Estimated Quantile = 3.2316
+
+Linear Hypotheses:
+                                  Estimate   lwr        upr       
+No. 462 - Svansota == 0             5.000003  -8.581539  18.581546
+Manchuria - Svansota == 0           1.086112 -12.495430  14.667655
+No. 475 - Svansota == 0             1.383333 -12.198209  14.964876
+Velvet - Svansota == 0              2.683332 -10.898211  16.264874
+Peatland - Svansota == 0            3.802778  -9.778764  17.384321
+Glabron - Svansota == 0             2.963888 -10.617654  16.545431
+No. 457 - Svansota == 0             5.469447  -8.112096  19.050989
+Wisconsin No. 38 - Svansota == 0    9.016668  -4.564874  22.598211
+Trebi - Svansota == 0               9.022216  -4.559327  22.603759
+Manchuria - No. 462 == 0           -3.913891 -17.495434   9.667652
+No. 475 - No. 462 == 0             -3.616670 -17.198213   9.964873
+Velvet - No. 462 == 0              -2.316672 -15.898214  11.264871
+Peatland - No. 462 == 0            -1.197225 -14.778768  12.384318
+Glabron - No. 462 == 0             -2.036115 -15.617658  11.545428
+No. 457 - No. 462 == 0              0.469443 -13.112099  14.050986
+Wisconsin No. 38 - No. 462 == 0     4.016665  -9.564878  17.598208
+Trebi - No. 462 == 0                4.022213  -9.559330  17.603755
+No. 475 - Manchuria == 0            0.297221 -13.284322  13.878764
+Velvet - Manchuria == 0             1.597219 -11.984324  15.178762
+Peatland - Manchuria == 0           2.716666 -10.864877  16.298209
+Glabron - Manchuria == 0            1.877776 -11.703767  15.459319
+No. 457 - Manchuria == 0            4.383334  -9.198209  17.964877
+Wisconsin No. 38 - Manchuria == 0   7.930556  -5.650987  21.512099
+Trebi - Manchuria == 0              7.936103  -5.645439  21.517646
+Velvet - No. 475 == 0               1.299998 -12.281544  14.881541
+Peatland - No. 475 == 0             2.419445 -11.162098  16.000988
+Glabron - No. 475 == 0              1.580555 -12.000988  15.162098
+No. 457 - No. 475 == 0              4.086113  -9.495429  17.667656
+Wisconsin No. 38 - No. 475 == 0     7.633335  -5.948208  21.214878
+Trebi - No. 475 == 0                7.638882  -5.942660  21.220425
+Peatland - Velvet == 0              1.119447 -12.462096  14.700989
+Glabron - Velvet == 0               0.280557 -13.300986  13.862099
+No. 457 - Velvet == 0               2.786115 -10.795428  16.367658
+Wisconsin No. 38 - Velvet == 0      6.333337  -7.248206  19.914879
+Trebi - Velvet == 0                 6.338884  -7.242659  19.920427
+Glabron - Peatland == 0            -0.838890 -14.420433  12.742653
+No. 457 - Peatland == 0             1.666668 -11.914874  15.248211
+Wisconsin No. 38 - Peatland == 0    5.213890  -8.367653  18.795433
+Trebi - Peatland == 0               5.219437  -8.362105  18.800980
+No. 457 - Glabron == 0              2.505558 -11.075984  16.087101
+Wisconsin No. 38 - Glabron == 0     6.052780  -7.528763  19.634323
+Trebi - Glabron == 0                6.058327  -7.523215  19.639870
+Wisconsin No. 38 - No. 457 == 0     3.547222 -10.034321  17.128764
+Trebi - No. 457 == 0                3.552769 -10.028774  17.134312
+Trebi - Wisconsin No. 38 == 0       0.005547 -13.575995  13.587090
+
+95% family-wise confidence level
+ 
+
+
+> plot(confint(.Pairs))
+
+> remove(.Pairs)
+
+> remove(.Anova)
+
+> par(oma=c(0,5,0,0))
+$oma
+[1] 0 0 0 0
+
+
+> .Anova <- lm(yield ~ variety, data=barley)
+
+> anova(.Anova)
+Analysis of Variance Table
+
+Response: yield
+           Df  Sum Sq Mean Sq F value Pr(>F)
+variety     9  1052.6   117.0  1.1036 0.3663
+Residuals 110 11657.4   106.0               
+
+> tapply(barley$yield, barley$variety, mean, na.rm=TRUE) # means
+        Svansota          No. 462        Manchuria          No. 475 
+        30.37778         35.37778         31.46389         31.76111 
+          Velvet         Peatland          Glabron          No. 457 
+        33.06111         34.18056         33.34167         35.84722 
+Wisconsin No. 38            Trebi 
+        39.39445         39.39999 
+
+> tapply(barley$yield, barley$variety, sd, na.rm=TRUE) # std. deviations
+        Svansota          No. 462        Manchuria          No. 475 
+        9.055646        13.595439         7.513617        10.446737 
+          Velvet         Peatland          Glabron          No. 457 
+        8.579100         7.088664        10.210542        11.069427 
+Wisconsin No. 38            Trebi 
+       11.865780        11.657459 
+
+> tapply(barley$yield, barley$variety, function(x) sum(!is.na(x))) # counts
+        Svansota          No. 462        Manchuria          No. 475 
+              12               12               12               12 
+          Velvet         Peatland          Glabron          No. 457 
+              12               12               12               12 
+Wisconsin No. 38            Trebi 
+              12               12 
+
+> .Pairs <- glht(.Anova, linfct = mcp(variety = "Tukey"))
+
+> confint(.Pairs)
+
+	 Simultaneous Confidence Intervals for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = yield ~ variety, data = barley)
+
+Estimated Quantile = 3.2261
+
+Linear Hypotheses:
+                                  Estimate   lwr        upr       
+No. 462 - Svansota == 0             5.000003  -8.558276  18.558282
+Manchuria - Svansota == 0           1.086112 -12.472167  14.644392
+No. 475 - Svansota == 0             1.383333 -12.174946  14.941612
+Velvet - Svansota == 0              2.683332 -10.874947  16.241611
+Peatland - Svansota == 0            3.802778  -9.755501  17.361057
+Glabron - Svansota == 0             2.963888 -10.594391  16.522167
+No. 457 - Svansota == 0             5.469447  -8.088832  19.027726
+Wisconsin No. 38 - Svansota == 0    9.016668  -4.541611  22.574947
+Trebi - Svansota == 0               9.022216  -4.536063  22.580495
+Manchuria - No. 462 == 0           -3.913891 -17.472170   9.644388
+No. 475 - No. 462 == 0             -3.616670 -17.174949   9.941609
+Velvet - No. 462 == 0              -2.316672 -15.874951  11.241607
+Peatland - No. 462 == 0            -1.197225 -14.755504  12.361054
+Glabron - No. 462 == 0             -2.036115 -15.594394  11.522164
+No. 457 - No. 462 == 0              0.469443 -13.088836  14.027722
+Wisconsin No. 38 - No. 462 == 0     4.016665  -9.541614  17.574944
+Trebi - No. 462 == 0                4.022213  -9.536067  17.580492
+No. 475 - Manchuria == 0            0.297221 -13.261058  13.855500
+Velvet - Manchuria == 0             1.597219 -11.961060  15.155498
+Peatland - Manchuria == 0           2.716666 -10.841613  16.274945
+Glabron - Manchuria == 0            1.877776 -11.680503  15.436055
+No. 457 - Manchuria == 0            4.383334  -9.174945  17.941613
+Wisconsin No. 38 - Manchuria == 0   7.930556  -5.627723  21.488835
+Trebi - Manchuria == 0              7.936103  -5.622176  21.494382
+Velvet - No. 475 == 0               1.299998 -12.258281  14.858277
+Peatland - No. 475 == 0             2.419445 -11.138834  15.977724
+Glabron - No. 475 == 0              1.580555 -11.977724  15.138834
+No. 457 - No. 475 == 0              4.086113  -9.472166  17.644392
+Wisconsin No. 38 - No. 475 == 0     7.633335  -5.924944  21.191614
+Trebi - No. 475 == 0                7.638882  -5.919397  21.197162
+Peatland - Velvet == 0              1.119447 -12.438832  14.677726
+Glabron - Velvet == 0               0.280557 -13.277722  13.838836
+No. 457 - Velvet == 0               2.786115 -10.772164  16.344394
+Wisconsin No. 38 - Velvet == 0      6.333337  -7.224942  19.891616
+Trebi - Velvet == 0                 6.338884  -7.219395  19.897163
+Glabron - Peatland == 0            -0.838890 -14.397169  12.719389
+No. 457 - Peatland == 0             1.666668 -11.891611  15.224947
+Wisconsin No. 38 - Peatland == 0    5.213890  -8.344389  18.772169
+Trebi - Peatland == 0               5.219437  -8.338842  18.777717
+No. 457 - Glabron == 0              2.505558 -11.052721  16.063837
+Wisconsin No. 38 - Glabron == 0     6.052780  -7.505499  19.611059
+Trebi - Glabron == 0                6.058327  -7.499952  19.616607
+Wisconsin No. 38 - No. 457 == 0     3.547222 -10.011057  17.105501
+Trebi - No. 457 == 0                3.552769 -10.005510  17.111048
+Trebi - Wisconsin No. 38 == 0       0.005547 -13.552732  13.563827
+
+95% family-wise confidence level
+ 
+
+
+> plot(confint(.Pairs))
+
+> remove(.Pairs)
+
+> remove(.Anova)
+
+> par(oma=c(0,8,0,0))
+$oma
+[1] 0 5 0 0
+
+
+> .Anova <- lm(yield ~ variety, data=barley)
+
+> anova(.Anova)
+Analysis of Variance Table
+
+Response: yield
+           Df  Sum Sq Mean Sq F value Pr(>F)
+variety     9  1052.6   117.0  1.1036 0.3663
+Residuals 110 11657.4   106.0               
+
+> tapply(barley$yield, barley$variety, mean, na.rm=TRUE) # means
+        Svansota          No. 462        Manchuria          No. 475 
+        30.37778         35.37778         31.46389         31.76111 
+          Velvet         Peatland          Glabron          No. 457 
+        33.06111         34.18056         33.34167         35.84722 
+Wisconsin No. 38            Trebi 
+        39.39445         39.39999 
+
+> tapply(barley$yield, barley$variety, sd, na.rm=TRUE) # std. deviations
+        Svansota          No. 462        Manchuria          No. 475 
+        9.055646        13.595439         7.513617        10.446737 
+          Velvet         Peatland          Glabron          No. 457 
+        8.579100         7.088664        10.210542        11.069427 
+Wisconsin No. 38            Trebi 
+       11.865780        11.657459 
+
+> tapply(barley$yield, barley$variety, function(x) sum(!is.na(x))) # counts
+        Svansota          No. 462        Manchuria          No. 475 
+              12               12               12               12 
+          Velvet         Peatland          Glabron          No. 457 
+              12               12               12               12 
+Wisconsin No. 38            Trebi 
+              12               12 
+
+> .Pairs <- glht(.Anova, linfct = mcp(variety = "Tukey"))
+
+> confint(.Pairs)
+
+	 Simultaneous Confidence Intervals for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = yield ~ variety, data = barley)
+
+Estimated Quantile = 3.2308
+
+Linear Hypotheses:
+                                  Estimate   lwr        upr       
+No. 462 - Svansota == 0             5.000003  -8.578069  18.578076
+Manchuria - Svansota == 0           1.086112 -12.491960  14.664185
+No. 475 - Svansota == 0             1.383333 -12.194739  14.961406
+Velvet - Svansota == 0              2.683332 -10.894741  16.261404
+Peatland - Svansota == 0            3.802778  -9.775294  17.380851
+Glabron - Svansota == 0             2.963888 -10.614184  16.541961
+No. 457 - Svansota == 0             5.469447  -8.108626  19.047519
+Wisconsin No. 38 - Svansota == 0    9.016668  -4.561404  22.594741
+Trebi - Svansota == 0               9.022216  -4.555857  22.600288
+Manchuria - No. 462 == 0           -3.913891 -17.491963   9.664182
+No. 475 - No. 462 == 0             -3.616670 -17.194742   9.961402
+Velvet - No. 462 == 0              -2.316672 -15.894744  11.261401
+Peatland - No. 462 == 0            -1.197225 -14.775297  12.380847
+Glabron - No. 462 == 0             -2.036115 -15.614187  11.541957
+No. 457 - No. 462 == 0              0.469443 -13.108629  14.047516
+Wisconsin No. 38 - No. 462 == 0     4.016665  -9.561407  17.594737
+Trebi - No. 462 == 0                4.022213  -9.555860  17.600285
+No. 475 - Manchuria == 0            0.297221 -13.280852  13.875293
+Velvet - Manchuria == 0             1.597219 -11.980853  15.175292
+Peatland - Manchuria == 0           2.716666 -10.861407  16.294738
+Glabron - Manchuria == 0            1.877776 -11.700297  15.455848
+No. 457 - Manchuria == 0            4.383334  -9.194738  17.961407
+Wisconsin No. 38 - Manchuria == 0   7.930556  -5.647517  21.508628
+Trebi - Manchuria == 0              7.936103  -5.641969  21.514176
+Velvet - No. 475 == 0               1.299998 -12.278074  14.878071
+Peatland - No. 475 == 0             2.419445 -11.158627  15.997517
+Glabron - No. 475 == 0              1.580555 -11.997517  15.158627
+No. 457 - No. 475 == 0              4.086113  -9.491959  17.664186
+Wisconsin No. 38 - No. 475 == 0     7.633335  -5.944737  21.211407
+Trebi - No. 475 == 0                7.638882  -5.939190  21.216955
+Peatland - Velvet == 0              1.119447 -12.458626  14.697519
+Glabron - Velvet == 0               0.280557 -13.297516  13.858629
+No. 457 - Velvet == 0               2.786115 -10.791957  16.364187
+Wisconsin No. 38 - Velvet == 0      6.333337  -7.244736  19.911409
+Trebi - Velvet == 0                 6.338884  -7.239188  19.916957
+Glabron - Peatland == 0            -0.838890 -14.416962  12.739182
+No. 457 - Peatland == 0             1.666668 -11.911404  15.244741
+Wisconsin No. 38 - Peatland == 0    5.213890  -8.364182  18.791962
+Trebi - Peatland == 0               5.219437  -8.358635  18.797510
+No. 457 - Glabron == 0              2.505558 -11.072514  16.083631
+Wisconsin No. 38 - Glabron == 0     6.052780  -7.525292  19.630852
+Trebi - Glabron == 0                6.058327  -7.519745  19.636400
+Wisconsin No. 38 - No. 457 == 0     3.547222 -10.030851  17.125294
+Trebi - No. 457 == 0                3.552769 -10.025303  17.130842
+Trebi - Wisconsin No. 38 == 0       0.005547 -13.572525  13.583620
+
+95% family-wise confidence level
+ 
+
+
+> plot(confint(.Pairs))
+
+> remove(.Pairs)
+
+> remove(.Anova)
+
+> par(oma=c(0,9,0,0))
+$oma
+[1] 0 8 0 0
+
+
+> .Anova <- lm(yield ~ variety, data=barley)
+
+> anova(.Anova)
+Analysis of Variance Table
+
+Response: yield
+           Df  Sum Sq Mean Sq F value Pr(>F)
+variety     9  1052.6   117.0  1.1036 0.3663
+Residuals 110 11657.4   106.0               
+
+> tapply(barley$yield, barley$variety, mean, na.rm=TRUE) # means
+        Svansota          No. 462        Manchuria          No. 475 
+        30.37778         35.37778         31.46389         31.76111 
+          Velvet         Peatland          Glabron          No. 457 
+        33.06111         34.18056         33.34167         35.84722 
+Wisconsin No. 38            Trebi 
+        39.39445         39.39999 
+
+> tapply(barley$yield, barley$variety, sd, na.rm=TRUE) # std. deviations
+        Svansota          No. 462        Manchuria          No. 475 
+        9.055646        13.595439         7.513617        10.446737 
+          Velvet         Peatland          Glabron          No. 457 
+        8.579100         7.088664        10.210542        11.069427 
+Wisconsin No. 38            Trebi 
+       11.865780        11.657459 
+
+> tapply(barley$yield, barley$variety, function(x) sum(!is.na(x))) # counts
+        Svansota          No. 462        Manchuria          No. 475 
+              12               12               12               12 
+          Velvet         Peatland          Glabron          No. 457 
+              12               12               12               12 
+Wisconsin No. 38            Trebi 
+              12               12 
+
+> .Pairs <- glht(.Anova, linfct = mcp(variety = "Tukey"))
+
+> confint(.Pairs)
+
+	 Simultaneous Confidence Intervals for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = yield ~ variety, data = barley)
+
+Estimated Quantile = 3.228
+
+Linear Hypotheses:
+                                  Estimate   lwr        upr       
+No. 462 - Svansota == 0             5.000003  -8.566475  18.566482
+Manchuria - Svansota == 0           1.086112 -12.480366  14.652591
+No. 475 - Svansota == 0             1.383333 -12.183145  14.949812
+Velvet - Svansota == 0              2.683332 -10.883147  16.249810
+Peatland - Svansota == 0            3.802778  -9.763700  17.369257
+Glabron - Svansota == 0             2.963888 -10.602590  16.530367
+No. 457 - Svansota == 0             5.469447  -8.097032  19.035925
+Wisconsin No. 38 - Svansota == 0    9.016668  -4.549810  22.583147
+Trebi - Svansota == 0               9.022216  -4.544263  22.588695
+Manchuria - No. 462 == 0           -3.913891 -17.480370   9.652588
+No. 475 - No. 462 == 0             -3.616670 -17.183149   9.949809
+Velvet - No. 462 == 0              -2.316672 -15.883150  11.249807
+Peatland - No. 462 == 0            -1.197225 -14.763704  12.369254
+Glabron - No. 462 == 0             -2.036115 -15.602594  11.530364
+No. 457 - No. 462 == 0              0.469443 -13.097035  14.035922
+Wisconsin No. 38 - No. 462 == 0     4.016665  -9.549814  17.583144
+Trebi - No. 462 == 0                4.022213  -9.544266  17.588691
+No. 475 - Manchuria == 0            0.297221 -13.269258  13.863700
+Velvet - Manchuria == 0             1.597219 -11.969260  15.163698
+Peatland - Manchuria == 0           2.716666 -10.849813  16.283145
+Glabron - Manchuria == 0            1.877776 -11.688703  15.444255
+No. 457 - Manchuria == 0            4.383334  -9.183145  17.949813
+Wisconsin No. 38 - Manchuria == 0   7.930556  -5.635923  21.497035
+Trebi - Manchuria == 0              7.936103  -5.630375  21.502582
+Velvet - No. 475 == 0               1.299998 -12.266480  14.866477
+Peatland - No. 475 == 0             2.419445 -11.147034  15.985924
+Glabron - No. 475 == 0              1.580555 -11.985924  15.147034
+No. 457 - No. 475 == 0              4.086113  -9.480365  17.652592
+Wisconsin No. 38 - No. 475 == 0     7.633335  -5.933144  21.199814
+Trebi - No. 475 == 0                7.638882  -5.927596  21.205361
+Peatland - Velvet == 0              1.119447 -12.447032  14.685925
+Glabron - Velvet == 0               0.280557 -13.285922  13.847035
+No. 457 - Velvet == 0               2.786115 -10.780364  16.352594
+Wisconsin No. 38 - Velvet == 0      6.333337  -7.233142  19.899815
+Trebi - Velvet == 0                 6.338884  -7.227595  19.905363
+Glabron - Peatland == 0            -0.838890 -14.405369  12.727589
+No. 457 - Peatland == 0             1.666668 -11.899810  15.233147
+Wisconsin No. 38 - Peatland == 0    5.213890  -8.352589  18.780369
+Trebi - Peatland == 0               5.219437  -8.347041  18.785916
+No. 457 - Glabron == 0              2.505558 -11.060920  16.072037
+Wisconsin No. 38 - Glabron == 0     6.052780  -7.513699  19.619259
+Trebi - Glabron == 0                6.058327  -7.508151  19.624806
+Wisconsin No. 38 - No. 457 == 0     3.547222 -10.019257  17.113700
+Trebi - No. 457 == 0                3.552769 -10.013710  17.119248
+Trebi - Wisconsin No. 38 == 0       0.005547 -13.560931  13.572026
+
+95% family-wise confidence level
+ 
+
+
+> plot(confint(.Pairs))
+
+> remove(.Pairs)
+
+> remove(.Anova)
+
+> anova(lm(yield ~ variety, data=barley))
+Analysis of Variance Table
+
+Response: yield
+           Df  Sum Sq Mean Sq F value Pr(>F)
+variety     9  1052.6   117.0  1.1036 0.3663
+Residuals 110 11657.4   106.0               
+
+> tapply(barley$yield, barley$variety, mean, na.rm=TRUE) # means
+        Svansota          No. 462        Manchuria          No. 475 
+        30.37778         35.37778         31.46389         31.76111 
+          Velvet         Peatland          Glabron          No. 457 
+        33.06111         34.18056         33.34167         35.84722 
+Wisconsin No. 38            Trebi 
+        39.39445         39.39999 
+
+> tapply(barley$yield, barley$variety, sd, na.rm=TRUE) # std. deviations
+        Svansota          No. 462        Manchuria          No. 475 
+        9.055646        13.595439         7.513617        10.446737 
+          Velvet         Peatland          Glabron          No. 457 
+        8.579100         7.088664        10.210542        11.069427 
+Wisconsin No. 38            Trebi 
+       11.865780        11.657459 
+
+> tapply(barley$yield, barley$variety, function(x) sum(!is.na(x))) # counts
+        Svansota          No. 462        Manchuria          No. 475 
+              12               12               12               12 
+          Velvet         Peatland          Glabron          No. 457 
+              12               12               12               12 
+Wisconsin No. 38            Trebi 
+              12               12 
+
+> .Pairs <- simint(yield ~ variety, type="Tukey", data=barley)
+
+	 Simultaneous Confidence Intervals for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = yield ~ variety, data = barley)
+
+Estimated Quantile = 3.2281
+
+Linear Hypotheses:
+                                  Estimate   lwr        upr       
+No. 462 - Svansota == 0             5.000003  -8.566573  18.566580
+Manchuria - Svansota == 0           1.086112 -12.480464  14.652689
+No. 475 - Svansota == 0             1.383333 -12.183243  14.949910
+Velvet - Svansota == 0              2.683332 -10.883245  16.249908
+Peatland - Svansota == 0            3.802778  -9.763798  17.369355
+Glabron - Svansota == 0             2.963888 -10.602688  16.530465
+No. 457 - Svansota == 0             5.469447  -8.097130  19.036023
+Wisconsin No. 38 - Svansota == 0    9.016668  -4.549908  22.583245
+Trebi - Svansota == 0               9.022216  -4.544360  22.588792
+Manchuria - No. 462 == 0           -3.913891 -17.480467   9.652685
+No. 475 - No. 462 == 0             -3.616670 -17.183246   9.949906
+Velvet - No. 462 == 0              -2.316672 -15.883248  11.249905
+Peatland - No. 462 == 0            -1.197225 -14.763801  12.369351
+Glabron - No. 462 == 0             -2.036115 -15.602691  11.530461
+No. 457 - No. 462 == 0              0.469443 -13.097133  14.036020
+Wisconsin No. 38 - No. 462 == 0     4.016665  -9.549911  17.583241
+Trebi - No. 462 == 0                4.022213  -9.544364  17.588789
+No. 475 - Manchuria == 0            0.297221 -13.269355  13.863797
+Velvet - Manchuria == 0             1.597219 -11.969357  15.163795
+Peatland - Manchuria == 0           2.716666 -10.849910  16.283242
+Glabron - Manchuria == 0            1.877776 -11.688800  15.444352
+No. 457 - Manchuria == 0            4.383334  -9.183242  17.949910
+Wisconsin No. 38 - Manchuria == 0   7.930556  -5.636020  21.497132
+Trebi - Manchuria == 0              7.936103  -5.630473  21.502680
+Velvet - No. 475 == 0               1.299998 -12.266578  14.866575
+Peatland - No. 475 == 0             2.419445 -11.147131  15.986021
+Glabron - No. 475 == 0              1.580555 -11.986021  15.147131
+No. 457 - No. 475 == 0              4.086113  -9.480463  17.652690
+Wisconsin No. 38 - No. 475 == 0     7.633335  -5.933241  21.199911
+Trebi - No. 475 == 0                7.638882  -5.927694  21.205459
+Peatland - Velvet == 0              1.119447 -12.447130  14.686023
+Glabron - Velvet == 0               0.280557 -13.286020  13.847133
+No. 457 - Velvet == 0               2.786115 -10.780461  16.352691
+Wisconsin No. 38 - Velvet == 0      6.333337  -7.233240  19.899913
+Trebi - Velvet == 0                 6.338884  -7.227692  19.905460
+Glabron - Peatland == 0            -0.838890 -14.405466  12.727686
+No. 457 - Peatland == 0             1.666668 -11.899908  15.233245
+Wisconsin No. 38 - Peatland == 0    5.213890  -8.352686  18.780466
+Trebi - Peatland == 0               5.219437  -8.347139  18.786014
+No. 457 - Glabron == 0              2.505558 -11.061018  16.072135
+Wisconsin No. 38 - Glabron == 0     6.052780  -7.513796  19.619356
+Trebi - Glabron == 0                6.058327  -7.508249  19.624904
+Wisconsin No. 38 - No. 457 == 0     3.547222 -10.019355  17.113798
+Trebi - No. 457 == 0                3.552769 -10.013807  17.119345
+Trebi - Wisconsin No. 38 == 0       0.005547 -13.561029  13.572124
+
+95% family-wise confidence level
+ 
+
+
+> summary(.Pairs)
+
+	 Simultaneous Confidence Intervals for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = yield ~ variety, data = barley)
+
+Estimated Quantile = 3.2281
+
+Linear Hypotheses:
+                                  Estimate   lwr        upr       
+No. 462 - Svansota == 0             5.000003  -8.566573  18.566580
+Manchuria - Svansota == 0           1.086112 -12.480464  14.652689
+No. 475 - Svansota == 0             1.383333 -12.183243  14.949910
+Velvet - Svansota == 0              2.683332 -10.883245  16.249908
+Peatland - Svansota == 0            3.802778  -9.763798  17.369355
+Glabron - Svansota == 0             2.963888 -10.602688  16.530465
+No. 457 - Svansota == 0             5.469447  -8.097130  19.036023
+Wisconsin No. 38 - Svansota == 0    9.016668  -4.549908  22.583245
+Trebi - Svansota == 0               9.022216  -4.544360  22.588792
+Manchuria - No. 462 == 0           -3.913891 -17.480467   9.652685
+No. 475 - No. 462 == 0             -3.616670 -17.183246   9.949906
+Velvet - No. 462 == 0              -2.316672 -15.883248  11.249905
+Peatland - No. 462 == 0            -1.197225 -14.763801  12.369351
+Glabron - No. 462 == 0             -2.036115 -15.602691  11.530461
+No. 457 - No. 462 == 0              0.469443 -13.097133  14.036020
+Wisconsin No. 38 - No. 462 == 0     4.016665  -9.549911  17.583241
+Trebi - No. 462 == 0                4.022213  -9.544364  17.588789
+No. 475 - Manchuria == 0            0.297221 -13.269355  13.863797
+Velvet - Manchuria == 0             1.597219 -11.969357  15.163795
+Peatland - Manchuria == 0           2.716666 -10.849910  16.283242
+Glabron - Manchuria == 0            1.877776 -11.688800  15.444352
+No. 457 - Manchuria == 0            4.383334  -9.183242  17.949910
+Wisconsin No. 38 - Manchuria == 0   7.930556  -5.636020  21.497132
+Trebi - Manchuria == 0              7.936103  -5.630473  21.502680
+Velvet - No. 475 == 0               1.299998 -12.266578  14.866575
+Peatland - No. 475 == 0             2.419445 -11.147131  15.986021
+Glabron - No. 475 == 0              1.580555 -11.986021  15.147131
+No. 457 - No. 475 == 0              4.086113  -9.480463  17.652690
+Wisconsin No. 38 - No. 475 == 0     7.633335  -5.933241  21.199911
+Trebi - No. 475 == 0                7.638882  -5.927694  21.205459
+Peatland - Velvet == 0              1.119447 -12.447130  14.686023
+Glabron - Velvet == 0               0.280557 -13.286020  13.847133
+No. 457 - Velvet == 0               2.786115 -10.780461  16.352691
+Wisconsin No. 38 - Velvet == 0      6.333337  -7.233240  19.899913
+Trebi - Velvet == 0                 6.338884  -7.227692  19.905460
+Glabron - Peatland == 0            -0.838890 -14.405466  12.727686
+No. 457 - Peatland == 0             1.666668 -11.899908  15.233245
+Wisconsin No. 38 - Peatland == 0    5.213890  -8.352686  18.780466
+Trebi - Peatland == 0               5.219437  -8.347139  18.786014
+No. 457 - Glabron == 0              2.505558 -11.061018  16.072135
+Wisconsin No. 38 - Glabron == 0     6.052780  -7.513796  19.619356
+Trebi - Glabron == 0                6.058327  -7.508249  19.624904
+Wisconsin No. 38 - No. 457 == 0     3.547222 -10.019355  17.113798
+Trebi - No. 457 == 0                3.552769 -10.013807  17.119345
+Trebi - Wisconsin No. 38 == 0       0.005547 -13.561029  13.572124
+
+95% family-wise confidence level
+ 
+
+
+	 Simultaneous Confidence Intervals for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = yield ~ variety, data = barley)
+
+Estimated Quantile = 3.2281
+
+Linear Hypotheses:
+                                  Estimate   lwr        upr       
+No. 462 - Svansota == 0             5.000003  -8.566573  18.566580
+Manchuria - Svansota == 0           1.086112 -12.480464  14.652689
+No. 475 - Svansota == 0             1.383333 -12.183243  14.949910
+Velvet - Svansota == 0              2.683332 -10.883245  16.249908
+Peatland - Svansota == 0            3.802778  -9.763798  17.369355
+Glabron - Svansota == 0             2.963888 -10.602688  16.530465
+No. 457 - Svansota == 0             5.469447  -8.097130  19.036023
+Wisconsin No. 38 - Svansota == 0    9.016668  -4.549908  22.583245
+Trebi - Svansota == 0               9.022216  -4.544360  22.588792
+Manchuria - No. 462 == 0           -3.913891 -17.480467   9.652685
+No. 475 - No. 462 == 0             -3.616670 -17.183246   9.949906
+Velvet - No. 462 == 0              -2.316672 -15.883248  11.249905
+Peatland - No. 462 == 0            -1.197225 -14.763801  12.369351
+Glabron - No. 462 == 0             -2.036115 -15.602691  11.530461
+No. 457 - No. 462 == 0              0.469443 -13.097133  14.036020
+Wisconsin No. 38 - No. 462 == 0     4.016665  -9.549911  17.583241
+Trebi - No. 462 == 0                4.022213  -9.544364  17.588789
+No. 475 - Manchuria == 0            0.297221 -13.269355  13.863797
+Velvet - Manchuria == 0             1.597219 -11.969357  15.163795
+Peatland - Manchuria == 0           2.716666 -10.849910  16.283242
+Glabron - Manchuria == 0            1.877776 -11.688800  15.444352
+No. 457 - Manchuria == 0            4.383334  -9.183242  17.949910
+Wisconsin No. 38 - Manchuria == 0   7.930556  -5.636020  21.497132
+Trebi - Manchuria == 0              7.936103  -5.630473  21.502680
+Velvet - No. 475 == 0               1.299998 -12.266578  14.866575
+Peatland - No. 475 == 0             2.419445 -11.147131  15.986021
+Glabron - No. 475 == 0              1.580555 -11.986021  15.147131
+No. 457 - No. 475 == 0              4.086113  -9.480463  17.652690
+Wisconsin No. 38 - No. 475 == 0     7.633335  -5.933241  21.199911
+Trebi - No. 475 == 0                7.638882  -5.927694  21.205459
+Peatland - Velvet == 0              1.119447 -12.447130  14.686023
+Glabron - Velvet == 0               0.280557 -13.286020  13.847133
+No. 457 - Velvet == 0               2.786115 -10.780461  16.352691
+Wisconsin No. 38 - Velvet == 0      6.333337  -7.233240  19.899913
+Trebi - Velvet == 0                 6.338884  -7.227692  19.905460
+Glabron - Peatland == 0            -0.838890 -14.405466  12.727686
+No. 457 - Peatland == 0             1.666668 -11.899908  15.233245
+Wisconsin No. 38 - Peatland == 0    5.213890  -8.352686  18.780466
+Trebi - Peatland == 0               5.219437  -8.347139  18.786014
+No. 457 - Glabron == 0              2.505558 -11.061018  16.072135
+Wisconsin No. 38 - Glabron == 0     6.052780  -7.513796  19.619356
+Trebi - Glabron == 0                6.058327  -7.508249  19.624904
+Wisconsin No. 38 - No. 457 == 0     3.547222 -10.019355  17.113798
+Trebi - No. 457 == 0                3.552769 -10.013807  17.119345
+Trebi - Wisconsin No. 38 == 0       0.005547 -13.561029  13.572124
+
+95% family-wise confidence level
+ 
+
+
+> plot(.Pairs)
+
+> remove(.Pairs)
+
+> .Pairs <- glht.mmc(.Anova, linfct = mcp(variety = "Tukey"))
+
+> library(HH)
+ [1] "HH"        "foreign"   "abind"     "Rcmdr.HH"  "grid"      "multcomp" 
+ [7] "mvtnorm"   "lattice"   "leaps"     "relimp"    "RODBC"     "Rcmdr"    
+[13] "car"       "tcltk"     "stats"     "graphics"  "grDevices" "utils"    
+[19] "datasets"  "methods"   "base"     
+
+> .Pairs <- glht.mmc(.Anova, linfct = mcp(variety = "Tukey"))
+
+> .Anova <- lm(yield ~ variety, data=barley)
+
+> anova(.Anova)
+Analysis of Variance Table
+
+Response: yield
+           Df  Sum Sq Mean Sq F value Pr(>F)
+variety     9  1052.6   117.0  1.1036 0.3663
+Residuals 110 11657.4   106.0               
+
+> .Pairs <- glht.mmc(.Anova, linfct = mcp(variety = "Tukey"))
+
+> plot(.Pairs)
+
+> par(oma=c(0,0,0,5))
+$oma
+[1] 0 9 0 0
+
+
+> plot(.Pairs)
+
+> par(oma=c(0,0,0,7))
+$oma
+[1] 0 0 0 5
+
+
+> plot(.Pairs)
+
+> par(oma=c(0,0,0,12))
+$oma
+[1] 0 0 0 7
+
+
+> plot(.Pairs)
+
+> par(oma=c(0,0,0,9))
+$oma
+[1]  0  0  0 12
+
+
+> plot(.Pairs)
+
+> plot(.Pairs$mca, xaxs="i", xlim=par()$usr[1:2])
+
+> par(oma=c(0,9,0,0))
+$oma
+[1] 0 0 0 9
+
+
+> plot(.Pairs$mca, xaxs="i", xlim=par()$usr[1:2])
+
+> plot(.Pairs$mca, xaxs="i", xlim=par()$usr[1:2], cex=.7)
+
+> plot(.Pairs$mca, xaxs="i", xlim=par()$usr[1:2], cex.axis=.7)
+
+> par(oma=c(0,9,0,0))
+$oma
+[1] 0 0 0 9
+
+
+> plot(.Pairs$mca, xaxs="i", xlim=par()$usr[1:2], cex.axis=.7)
+
+> par(oma=c(0,0,0,9))
+$oma
+[1] 0 0 0 5
+
+
+> plot(.Pairs, ry=c(20,45))
+
+> plot(.Pairs$mca, xaxs="i", xlim=par()$usr[1:2], cex.axis=.7))
+
+> plot(.Pairs, cex.axis=.7)
+
+> plot(.Pairs, ry=c(20,45), cex.axis=.7)
+
+> plot(.Pairs, ry=c(20,45), cex=.7)
+
+> plot(.Pairs, ry=c(20,45), cex=.7, iso.name=FALSE, x.offset=-2)
+
+> par(oma=c(0,9,0,0))
+$oma
+[1] 0 0 0 9
+
+
+> plot(.Pairs$mca, xaxs="i", xlim=par()$usr[1:2], cex.axis=.7)
+

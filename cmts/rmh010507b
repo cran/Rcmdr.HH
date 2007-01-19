@@ -1,0 +1,89 @@
+rmh comments to bholland
+
+keyed to numbers in bholland.121606
+All my answers are with respect to R-2.4.1 and R Commander Version 1.2-6
+which I put on your machine last week.
+
+1. Data/Active Data set/stack
+
+See ?stack
+See also ?reshape
+I think reshape might be a better candidate for a menu.
+
+
+2.  Would some additional fill-in-the-blank boxes on the right
+for cex and perhaps some others be what you want?
+I am looking at the
+ scatterplot, scatterplot matrix, XY Conditioning Plot
+menus
+
+3. Ambiguous request
+a. intervals for coefficients
+Models/confidence intervals...
+
+b. intervals for yhat?
+Last year's Rcmdr.HH menu has the HH function ci.plot for simple
+linear regression on the "Statistics/fit models/confidence interval
+plot" menu.  Do you need more than that?
+
+Your note said multiple regression, but that needs serious thinking as
+the projection of the intervals for the observed points for y ~ x1 + x2
+onto the y by x1 plane is not smooth.  You need to hold x2 constant to get
+anything reasonable.  Do you know of anyone who has worked that out?  If so
+we can program it.
+
+4. That is easy with the command language.
+
+The scatterplot menu has an "identify points" checkbox.  Is that what
+you want?
+
+9.  that is an easy thing to add.
+DONE!  Turned out not to be easy as I has thought as I discovered I
+designed two functions to recursively call each other.  I programmed
+it cleaner.  Please check.
+
+
+7. There are three menus in which to change the order:
+twoWayTable.HH
+analyzeTwoWayTable.HH
+enterTable.HH
+
+In all three the menu should become
+
+Displays
+Observed Frequencies             [check]
+Expected Frequencies             [check]
+Cell chi-square components       [check]
+
+Cell chi components (residuals)  [empty]
+Row percentages                  [empty]
+Column Percentages               [empty]
+Total Percentages                [empty]
+
+Hypothesis Tests
+Chi-square test of independence  [check]
+Fisher's exact test              [check]
+
+I should merge these three and have them call a common file for the
+analysis menus.
+
+
+5.  Can you propose what the menu should look like?
+Perhaps something like
+
+    number of level(ABCD)
+p = ---------------------   ?
+    number of level(EFGH)
+
+
+6. Can you propose what the menu should look like?
+Perhaps something like
+
+    number of level(ABCD | group1)  -  number of level(ABCD | group2)
+p = ------------------------------     ------------------------------   ?
+          total in group1                   
+
+
+8.  Maybe with an additional menu item on the Data menu.
+I am not convinced this is worth the trouble.
+

@@ -1,0 +1,149 @@
+rmh comments to John Fox
+
+Happy New Year and I am back to working with Rcmdr.  Thanks again for
+the program.  I didn't teach the relevant course in Fall 2006 and I am
+teaching it again in Spring 2007.  Burt did teach it in the Fall and I
+am trying to get his wish list in place before classes start next
+week.  Some of them are included here.  Much off this version is catching
+up with the changes you have installed since the summer.
+
+You can look at Rcmdr.HH_1.4 on my web page.  I have not yet submitted
+it to CRAN.
+http://astro.ocis.temple.edu/~rmh/Rcmdr.HH
+
+This is based on R-2.4.1 and R Commander Version 1.2-6
+
+
+Here is a list of things in the order that I found them.
+Some are things I wrote, some are recommended changes to Rcmdr,
+some are comments, some are wish list.
+
+1. I see that your data menu now reads Excel datasets directly, in
+   addition to SPSS and Minitab files.  On my wish list is SAS
+   datasets.
+
+
+2. I clicked
+   Data/data in packages/read data/datasets/iris3
+Rcmdr made a copy of the iris3 data in my ".GlobalEnv" and
+gave the error message
+ERROR: iris3 is not a data frame and cannot be attached.
+
+a. is this an "ERROR"?  The dataset was found and is now in my environment.
+Therefore I think it should be a "WARNING".
+
+b. I think a better response from Rcmdr would be to convert it to a
+data.frame and issue a warning about the conversion.
+
+
+3. typo: missing word "are"
+ERROR: There no factors in the active data set.
+83175 Oct  4 20:58 utilities.R
+
+
+4. print.summary.regsubsets in leaps doesn't follow the rules about
+the behavior of print methods.  I sent revised
+print.summary.regsubsets to Tomham Lumley.  I don't use this function
+since I have print.summary.HH.regsubsets instead.
+
+"print.summary.regsubsets" <-
+function (x, ..., quote=FALSE) {
+  print(x$obj)
+  print(x$outmat, quote=quote)
+  invisible(x)
+}
+
+
+5. Not quite the right word in graphs-menu.R, lines 939 and 943.
+You are using the word "range" to mean
+     max(x)-min(x)
+To me "range" means the interval
+    (min(x), max(x))
+Therefore I don't like the use of "Same range" as a synonym for the
+trellis term "sliced".  I prefer something more descriptive,
+something like "same number of units per inch".
+
+
+6. stack() doesn't take factors.  I think this is a design error in
+stack().  I don't plan to fix it this week.  reshape() might be a
+better choice for a menu item.  reshape has more options to place into
+the menu.
+
+
+7. Reading Excel datasets prints an invalid statement (or perhaps just
+an incomplete set, since the channel is not defined) in the log.  I
+tried to repeat the command by clicking the generated statement in the log
+and it gave me an error.  I am not going to solve this now.
+
+ERROR:  syntax error in "Xr13.119 <- sqlQuery(channel = 3, select * from [Sheet1$]"
+
+
+8. The MS Open dialog box for Excel does not remember the directory
+that I opened in the previous time in the same Rcmdr session.  For
+classroom demonstrations and for students doing homework, this would
+be important.  The sheet dialog which replaces the open dialog is very
+tiny and easily overlooked.  I would prefer the sheet dialog to
+overlay the open dialog so that I will see it and visually connect it
+with the current command.
+
+
+9. The stack menu item proposes the default name "StackedData".  I
+would always like the name OldNames, as in X13.119s <- stack(X13.119[,
+c("X.100.Limit","X.3000.Limit")]) Is there a way (Rcmdr option
+perhaps?) to change the default to base the proposed name on the old
+name?
+
+
+
+10. confint can have very long row names, leading to default graphs
+that can't be read.
+
+From the Rcmdr menu, load the barley data from lattice, then click
+statistics/means/oneway ANOVA
+click variety and yield and pairwise.
+
+Most of the labels are clipped on the left.
+This example needs a manually entered
+  par(oma=c(0,9,00))
+in order to read the graph.
+
+Can we put some control of oma onto the menu?
+
+
+11. scatterplot.matrix
+Now that you have included my density, I am using your function.  I
+still need my own menu into it because I consider the row1attop=FALSE
+argument to be critical.  If you make it a user option on the menu,
+even initialized to TRUE, then I will no longer need to maintain a
+separate menu.
+
+
+12. 3d scatterplot
+
+There were two items in my version that you dropped.
+
+The option to open a new 3d window is important.  When I rotate these
+graphs I like to be able to compare two or more graphs.  The relevant
+command is
+   rgl.open()
+and this can be entered manually.  I agree that it doesn't have to be
+on the "3D graph" menu.  I would like it as an item on the main
+"Graphs" menu.
+
+The other item is to plot a plane that is not the
+least-squares plane.  This is pedagogically useful.
+It allows us to show what "least squares" means.
+I think some kind of syntax to permit this option is important.
+I agree that the quick and dirty multiplier is not optimal.
+
+
+14. setOption in Commander in commander.R is very subtly broken.
+     current[[option]]
+needs to be replaced by
+     current[option][[1]]
+in two places.
+Reason, $ and [[ both use partial matching and [ does not.
+Thus "etc" and "etcMenu" are seen as identical when
+options()$Rcmdr$etcMenu exists and options()$Rcmdr$etc is NULL.
+I worked around this by assigning both.  This is safe at the moment
+because I am probably the only user of this feature.
