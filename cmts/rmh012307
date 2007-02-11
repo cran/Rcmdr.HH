@@ -1,0 +1,28 @@
+Statistics Menu Systems for Scientists
+
+Sophisticated programs for statistical analysis can be very complex.
+Good collaboration with scientists requires a software interface
+between the working styles of the data collector and interpretor and
+the analysis software.  In this session we describe and illustrate a
+menu system integrated into the Excel menu bar that gives complete
+access to the full power of R.  Excel is an ubiquitous spreadsheet
+often used for data collection, manipulation, and storage.  References
+to arbitrarily large and complex items can be stored in the
+spreadsheet cells.  R is an integrated suite of software facilities
+for data manipulation, calculation, statistical analysis, and
+graphical display.  The R command language can be daunting for an
+occasional user who needs access to the computational power of the
+language.  This session includes discussions of a newly created system
+that allows substantial access to R via a clickable menu residing on
+the spreadsheet bar of Microsoft Excel.  Results from the analyses can
+be returned to the spreadsheet.  The presentations discuss the
+development, implementation and applications of this new technology.
+
+1. Design of the Rcmdr Menu System
+John Fox
+
+2. Integration of the Rcmdr Menu System into Excel
+Erich Neuwirth
+
+3. Applications of R controlled through the Excel interface.
+Narasimhan Balasubramanian

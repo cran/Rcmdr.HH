@@ -1,0 +1,17 @@
+Date: Wed 21 Feb 13:15:12 EST 2007
+From: Robert.C.Gagnon@gsk.com Add To Address Book | This is Spam 
+Subject: Re: interface title and abstract 
+To: "Richard M. Heiberger" <rmh@temple.edu> 
+
+
+How is this? 
+
+Distribution using Excel of microarray gene expression graphics drawn in S-Plus following statistical analysis in SAS. 
+
+Microsoft Excel is a well known and popular system for assembling multiple spreadsheets of data for the purpose of collection, storage, manipulation, and visualization. The Excel system may falter when data analysis requires complex statistical modeling, that is, models which go beyond the basic statistical models incorporated in Excel. Further, ühigh throughputý issues arise when a single, complex statistical analysis must be repeated potentially thousands of times on rows or columns of data, and high quality visualizations of this data are needed. One example of this scenario is analysis of data from microarray gene expression experiments. Data storage and analysis of expression profiles from thousands of genes is required. Visualization is needed for all genes, or for subsets of interesting genes which are statistically significant. In this talk, I describe an analysis of thousands of genes from a microarray experiment, where the data are stored in Excel, multifactor analysis of variance is conducted in SAS, and genes of interest are visualized using S-Plus. Genes of interest and their annotations are stored back in Excel, with links to respective visualizations, stored as .jpg files generated from the S-Plus system. 
+
+Robert C Gagnon
+GlaxoSmithKline
+Robert_C_Gagnon@gsk.com
+Voice: 610-917-6208
+Fax: 610-917-7494

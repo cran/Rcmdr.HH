@@ -1,6 +1,6 @@
 Commander.HH <-
   function(etc.Menus=file.path(.path.package(package="Rcmdr.HH")[1], "etc"),
-           version="Rcmdr.HH_1.4 building on Rcmdr_1.2-6",
+           version=packageDescription("Rcmdr.HH", fields="Version"),
            Rcmdr.options) {
     if (!missing(Rcmdr.options)) options(Rcmdr=Rcmdr.options)
 
@@ -10,5 +10,5 @@ Commander.HH <-
     current$Rcmdr.HH <- version
     options(Rcmdr=current)
     Commander()
-  }
-
+    Message(paste(gettextRcmdr("R Commander HH Version "), version, sep=""))
+}

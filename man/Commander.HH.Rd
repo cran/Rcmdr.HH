@@ -9,7 +9,7 @@
 ## reads menu from elsewhere and
 ## adds the Rcmdr.HH version number to options("Rcmdr")
 Commander.HH(etc.Menus=file.path(.path.package(package="Rcmdr.HH")[1], "etc"),
-             version="Rcmdr.HH_1.4 building on Rcmdr_1.2-6",
+             version=packageDescription("Rcmdr.HH", fields="Version"),
              Rcmdr.options)
 }
 

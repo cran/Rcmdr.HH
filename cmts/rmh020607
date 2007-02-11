@@ -1,0 +1,62 @@
+Bob,
+
+I am putting together a session at the Interface Conference on
+
+   Accessible Interfaces to Advanced Statistics Software
+
+I am inviting you to prepare a talk along the lines of the title I
+have suggested below.  Can you do that?
+
+Rich
+
+
+Sophisticated programs for statistical analysis can be very complex.
+Good collaboration with scientists requires a software interface
+between the working styles of the data collector and interpretor and
+the analysis software.  Excel is an ubiquitous spreadsheet often used
+for data collection, manipulation, and storage.  References to
+arbitrarily large and complex items can be stored in the spreadsheet
+cells.
+
+
+1. An Office-Software- and Menu-Driven Interface to Advanced Statistics in
+   Biological Sciences
+Erich Neuwirth, University of Vienna
+ and 
+Thomas Baier, Technical University of Vienna
+
+In this session we describe and illustrate a menu system integrated
+into the Excel menu bar that gives complete access to the full power
+of R.  R is an integrated suite of software facilities for data
+manipulation, calculation, statistical analysis, and graphical
+display.  The R command language can be daunting for an occasional
+user who needs access to the computational power of the language.
+This session includes discussions of a newly created system that
+allows substantial access to R via a clickable menu residing on the
+spreadsheet bar of Microsoft Excel.  Results from the analyses can be
+returned to the spreadsheet.  The presentations discuss the
+development, implementation and applications of this new technology.
+
+
+2. Applications of R controlled through the Excel interface:
+   Distribution of Microarray Analysis Results.
+Narasimhan Balasubramanian
+Stanford University
+
+
+3. Distribution using Excel of Gene analysis graphics drawn in S-Plus
+   from data and analyses in SAS.
+Bob Gagnon, GSK
+
+
+
+The 39th Conference on Interface of Statistics and Computing Science
+will take place
+	May 23-26, Philadelphia, Doubletree Hotel
+The general theme is "Systems Biology".
+
+For more information, see the conference website
+	http://sbm.temple.edu/interface07/
+or contact Alan J. Izenman, Department of Statistics, Speakman
+Hall, 1810 North 13th Street, Philadelphia, PA 19122-6083, 
+(215) 204-8166, alan@temple.edu.

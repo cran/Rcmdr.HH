@@ -1,0 +1,73 @@
+"John Fox" <jfox@mcmaster.ca>,
+ Erich Neuwirth <erich.neuwirth@univie.ac.at>,
+ Thomas Baier <baier@ci.tuwien.ac.at>,
+ Balasubramanian Narasimhan <naras@stanford.edu> 
+
+
+John, Erich, Thomas, Naras,
+
+I would like to invite you to present a paper at the Interface 2007
+conference in Philadelphia May 23-26, 2007.  I am putting together a
+session on the computational statistics tools needed by biological
+scientists.  I hope you will be able to attend and speak.
+
+I have listed an abstract of the session and three proposed speakers
+and approximate titles below.  Please feel free to adapt the titles as
+appropriate; putting the word "biology" in the title is one such
+adaptation.  My goal for this set of talks is to illustrate for
+potential users that this is the right software interface.  I am
+looking for emphasis on design features for ease of use by
+biologically sophisticated users.  I am not interested, in this forum,
+on the computational details of how those features are built.
+
+Please let me know if you are able to prepare a paper along these lines
+for the Interface.
+
+Rich
+
+
+
+
+Statistics Menu Systems for Biologists
+
+Sophisticated programs for statistical analysis can be very complex.
+Good collaboration with scientists requires a software interface
+between the working styles of the data collector and interpretor and
+the analysis software.  In this session we describe and illustrate a
+menu system integrated into the Excel menu bar that gives complete
+access to the full power of R.  Excel is an ubiquitous spreadsheet
+often used for data collection, manipulation, and storage.  References
+to arbitrarily large and complex items can be stored in the
+spreadsheet cells.  R is an integrated suite of software facilities
+for data manipulation, calculation, statistical analysis, and
+graphical display.  The R command language can be daunting for an
+occasional user who needs access to the computational power of the
+language.  This session includes discussions of a newly created system
+that allows substantial access to R via a clickable menu residing on
+the spreadsheet bar of Microsoft Excel.  Results from the analyses can
+be returned to the spreadsheet.  The presentations discuss the
+development, implementation and applications of this new technology.
+
+1. Design of the Rcmdr Menu System
+John Fox
+
+2. Integration of the Rcmdr Menu System into Excel
+Erich Neuwirth and Thomas Baier
+
+3. Applications of R to Biological Sciences controlled through the
+Excel interface.
+Narasimhan Balasubramanian
+
+
+
+
+The 39th Conference on Interface of Statistics and Computing Science
+will take place
+	May 23-26, Philadelphia, Doubletree Hotel
+The general theme is "Systems Biology".
+
+For more information, see the conference website
+	http://sbm.temple.edu/interface07/
+or contact Alan J. Izenman, Department of Statistics, Speakman
+Hall, 1810 North 13th Street, Philadelphia, PA 19122-6083, 
+(215) 204-8166, alan@temple.edu.

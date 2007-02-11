@@ -1,14 +1,16 @@
-normalHypothesesPlot <- function(){
-    initializeDialog(title=gettextRcmdr("Normal Distribution"))
+tHypothesesPlot <- function(){
+    initializeDialog(title=gettextRcmdr("t Distribution"))
     muVar <- tclVar("0")
     muEntry <- tkentry(top, width="6", textvariable=muVar)
     sigmaVar <- tclVar("1")
     sigmaEntry <- tkentry(top, width="6", textvariable=sigmaVar)
+    degfreeVar <- tclVar("")
+    degfreeEntry <- tkentry(top, width="6", textvariable=degfreeVar)
     nVar <- tclVar("")
     nEntry <- tkentry(top, width="6", textvariable=nVar)
     criticalLowVar <- tclVar("")
     criticalLowEntry <- tkentry(top, width="6", textvariable=criticalLowVar)
-    criticalHighVar <- tclVar("1.645")
+    criticalHighVar <- tclVar(".05")
     criticalHighEntry <- tkentry(top, width="6", textvariable=criticalHighVar)
     obsValueVar <- tclVar("")
     obsValueEntry <- tkentry(top, width="6", textvariable=obsValueVar)
@@ -20,9 +22,10 @@ normalHypothesesPlot <- function(){
       closeDialog()
       mu <- as.numeric(tclvalue(muVar))
       sigma <- as.numeric(tclvalue(sigmaVar))
+      degfree <- as.numeric(tclvalue(degfreeVar))
       n <- as.numeric(tclvalue(nVar))
       criticalLow <- as.numeric(tclvalue(criticalLowVar))
-      criticalHigh <- as.numeric(tclvalue(criticalHighVar))
+      criticalHigh <- 1-as.numeric(tclvalue(criticalHighVar))
       obsValue <- as.numeric(tclvalue(obsValueVar))
       muAlt <- as.numeric(tclvalue(muAltVar))
       ymax <- as.numeric(tclvalue(ymaxVar))
@@ -62,29 +65,47 @@ normalHypothesesPlot <- function(){
                        command.se,
                        command.xlim,
                        command.ylim,
-                       ")", sep="")
+                       sep="")
+      if (!is.na(degfree))
+        command <- paste(command, ", df=", degfree, sep="")
+      else
+        degfree <- Inf
+      command <- paste(command, ")")
       justDoIt(command)
       logger(command)
       
       critical <- c(criticalLow, criticalHigh)
       critical <- critical[!is.na(critical)]
+      critical <- qt(critical, degfree)
       shade <- "right"
+      
+      if (length(critical)==2) {
+        critical <- paste("c(", critical[1], ",", critical[2], ")")
+        shade="outside"
+      }
+
       if (length(critical)==0) {
         critical <- mu + 20*se  ## big number, out of range of plot
       }
-      else
-        if (length(critical)==2) {
-          critical <- paste("c(", critical[1], ",", critical[2], ")")
-          shade="outside"
-        }
+
       command.critical <- paste(", critical=", mu, "+", critical, "*", se)
+
+      if (is.na(degfree) || degfree==Inf)
+        axis.name <- "z"
+      else
+        axis.name <- "t"
       
       ## Plot Alternate Hypothesis first
       if (!is.na(muAlt)) {
         command <- paste("norm.curve(mean=", muAlt,
                          command.se,
                          command.critical,
-                         ", shade='", "left", "', col='red', axis.name='z1'", ")", sep="")
+                         ", shade='", "left",
+                         "', col='red', axis.name='", axis.name, "1'",
+                         sep="")
+        if (!(is.na(degfree) || degfree==Inf))
+          command <- paste(command, ", df=", degfree, sep="")
+        command <- paste(command, ")")
         doItAndPrint(command)
       }
       
@@ -92,12 +113,18 @@ normalHypothesesPlot <- function(){
       command <- paste("norm.curve(mean=", mu,
                        command.se,
                        command.critical,
-                       ", shade='", shade, "', col='black', axis.name='z'", ")", sep="")
+                       ", shade='", shade,
+                       "', col='black', axis.name='", axis.name, "'",
+                       sep="")
+      if (!is.na(degfree))
+        command <- paste(command, ", df=", degfree, sep="")
+      command <- paste(command, ")")
       doItAndPrint(command)
 
       ## Observed Value
       if (!is.na(obsValue)) {
-        command <- paste("norm.observed(", obsValue, ")", sep="")
+        obs.T <- paste("round((", obsValue, " - ", mu, ")/(",  sigma, "/sqrt(", n, ")", "), 3)")
+        command <- paste("norm.observed(", obsValue, ", ", obs.T, ")", sep="")
         doItAndPrint(command)
       }
 
@@ -109,14 +136,15 @@ normalHypothesesPlot <- function(){
     }
     OKCancelHelp(helpSubject="dnorm")
     tkgrid(tklabel(top, text=gettextRcmdr("mu (mean)")), muEntry, sticky="e")
-    tkgrid(tklabel(top, text=gettextRcmdr("sigma (standard deviation)")), sigmaEntry, sticky="e")
+    tkgrid(tklabel(top, text=gettextRcmdr("s (standard deviation)")), sigmaEntry, sticky="e")
+    tkgrid(tklabel(top, text=gettextRcmdr("df (degrees of freedom)")), degfreeEntry, sticky="e")
     tkgrid(tklabel(top, text=gettextRcmdr("n (sample size)")), nEntry, sticky="e")
-    tkgrid(tklabel(top, text=gettextRcmdr("z_alpha (critical value)")), criticalLowEntry, sticky="e")
-    tkgrid(tklabel(top, text=gettextRcmdr("-z_alpha (critical value)")), criticalHighEntry, sticky="e")
+    tkgrid(tklabel(top, text=gettextRcmdr("left alpha")), criticalLowEntry, sticky="e")
+    tkgrid(tklabel(top, text=gettextRcmdr("right alpha")), criticalHighEntry, sticky="e")
     tkgrid(tklabel(top, text=gettextRcmdr("Observed Value")), obsValueEntry, sticky="e")
     tkgrid(tklabel(top, text=gettextRcmdr("mu (Alternate Hypothesis)")), muAltEntry, sticky="e")
     tkgrid(tklabel(top, text=gettextRcmdr("ymax (right-hand side)")), ymaxEntry, sticky="e")
-    tkgrid(buttonsFrame, columnspan=2, sticky="w")
+    tkgrid(buttonsFrame, columnspan=1, sticky="w")
     tkgrid.configure(muEntry, sticky="w")
     tkgrid.configure(sigmaEntry, sticky="w")
     tkgrid.configure(nEntry, sticky="w")
@@ -125,5 +153,5 @@ normalHypothesesPlot <- function(){
     tkgrid.configure(obsValueEntry, sticky="w")
     tkgrid.configure(muAltEntry, sticky="w")
     tkgrid.configure(ymaxEntry, sticky="w")
-    dialogSuffix(rows=5, columns=2, focus=muEntry)
+    dialogSuffix(rows=8, columns=1, focus=muEntry)
     }

@@ -1,8 +1,8 @@
 Package: Rcmdr.HH
 Type: Package
 Title: Rcmdr support for the introductory course at Temple University.
-Version: 1.6
-Date: 2007-01-19
+Version: 1.7-1
+Date: 2007-02-11
 Author: Richard M. Heiberger, with contributions from Burt Holland.
 Maintainer: Richard M. Heiberger <rmh@temple.edu>
 Depends: R (>= 2.3.1), Rcmdr, car, multcomp, leaps, lattice, grid, grDevices, rgl, abind, mgcv 
@@ -11,4 +11,4 @@ Description: Our introductory course spends time on several topics
         items and make them available.
 License: GPL version 2 or newer
 LazyLoad: no
-Packaged: Tue Jan 23 00:35:39 2007; rmh
+Packaged: Fri Feb 23 10:04:55 2007; rmh

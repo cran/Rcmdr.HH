@@ -200,7 +200,7 @@
     item    normalMenu      command         "Normal quantiles..."                           normalQuantiles             ""          ""
     item    normalMenu      command         "Normal probabilities..."                       normalProbabilities         ""          ""
     item    normalMenu      command         "Plot normal distribution..."                   normalDistributionPlot      ""          ""
-    item    normalMenu     command          "Plot normal hypotheses ... (HH)"               normalHypothesesPlot        "" "" ##HH
+    item    normalMenu     command          "Plot normal hypotheses ... (HH)"               normalHypothesesPlot        ""          "" ##HH
     item    normalMenu      command         "Sample from normal distribution..."            normalDistributionSamples   ""          ""
     
     # t distribution
@@ -209,6 +209,7 @@
     item    tMenu           command         "t quantiles..."                                tQuantiles                  ""          ""
     item    tMenu           command         "t probabilities..."                            tProbabilities              ""          ""
     item    tMenu           command         "Plot t distribution..."                        tDistributionPlot           ""          ""
+    item    tMenu           command         "Plot t hypotheses ... (HH)"                    tHypothesesPlot             ""          "" ##HH
     item    tMenu           command         "Sample from t distribution..."                 tDistributionSamples        ""          ""
     
     # Chi-square distribution
