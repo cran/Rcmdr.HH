@@ -1,171 +1,428 @@
 "panel.interaction2wt" <-
 function(x, y, subscripts, 
-                                 responselab, trace.values, factor.levels,
-                                 fun=mean, ...) {
-  tpg <- trellis.par.get("superpose.line")
+         responselab, trace.values,
+         factor.levels, factor.position,
+         fun=mean,
+         se,
+         ...,
+         box.ratio,
+         simple=FALSE,
+         simple.offset,
+         simple.scale,
+         data.x,
+         col.by.row=TRUE,
+         key.in=NULL ## list of key arguments
+         ) {
   if.R(r={
-    ## This loop is needed because
-    ##    console usage has i=2,
-    ##    Rcmdr script window has i=5,
-    ##    Rcmdr justDoIt has i=20
-    for (i in seq(2, length=30)) {
-      sf2 <- sys.frame(i)
-      column.tmp <- try(get("column", pos=sf2), silent=TRUE)
-      if (class(column.tmp) != "try-error") break
-    }
-    if (class(column.tmp) == "try-error")
-      stop("panel.interaction2wt is too deeply nested in the system stack.")
-    row <- get("row", pos=sf2)
-    column <- get("column", pos=sf2)
-    cols.per.page <- get("cols.per.page", pos=sf2)
-    rows.per.page <- get("rows.per.page", pos=sf2)
-  },
-       s={})
-  if (column==1) {
-    row.label <- names(factor.levels)[row]
-    row.levels <- factor.levels[[row]]$levels
-    n.levels <- min(length(tpg$col),length(row.levels))
-    key.list <- list(title=row.label ,
-                     cex.title=1,
-                     corner=c(.5,.5), border=TRUE,
-#                     x=-x.center*1.3, y=y.center,
-                     text=list(text=row.levels, cex=.8),
-                     lines=list(
-                       col=tpg$col[1:n.levels],
-                       lty=tpg$lty[1:n.levels],
-                       lwd=tpg$lwd[1:n.levels]))
-    if.R(r=draw.key(key.list, draw=TRUE),
-         s=do.call(key, key.list))
-    return()
+    tcL <- trellis.currentLayout()
+    rows.per.page <- dim(tcL)[1]
+    cols.per.page <- dim(tcL)[2]
+    cell <- panel.number()
+    row.panel <- row(tcL)[tcL==cell]
+    column.panel <- col(tcL)[tcL==cell]
+
+    these.labels <- c(trace.factor=names(factor.levels)[row.panel],
+                      x.factor=names(factor.levels)[column.panel])
+  },s={
+    rows.per.page <- length(factor.levels)
+    cols.per.page <- length(factor.levels)
+    cell <- get("cell", frame=sys.parent())
+
+    tcL <- matrix(seq(length=rows.per.page*cols.per.page),
+                  rows.per.page, cols.per.page,
+                  byrow=TRUE)
+    
+    these.labels <- get("panel.labels", frame=sys.parent())[cell,]
+
+    row.panel <- match(these.labels["trace.factor"], names(factor.levels))
+    column.panel <- match(these.labels["x.factor"], names(factor.levels))
   }
+       )
+  
+  trace.name <- these.labels["trace.factor"]
+  x.name <- these.labels["x.factor"]
+  trace.levels <- factor.levels[[trace.name]]
+  x.position <- factor.position[[x.name]]
+  x.levels <- factor.levels[[x.name]]
 
-  ## column > 1
+  tpg <- trellis.par.get("superpose.line")
+  tpg.col <- rep(tpg$col, length=length(trace.levels))
+  tpg.lty <- rep(tpg$lty, length=length(trace.levels))
+  tpg.lwd <- rep(tpg$lwd, length=length(trace.levels))
 
+  ## panels
+  if (trace.name ==  x.name) {## main diagonal
+    if (simple && cols.per.page==2) { ## simple effects
+      other.name <- names(factor.levels)[names(factor.levels) != x.name]
+      other.factor <- data.x[, other.name]
+      x.factor <- data.x[, x.name]
+      ioh.list <- list(x.factor, other.factor)
+      if (!missing(simple.offset))
+        ioh.list$b.offset <- simple.offset[[other.name]]
+      if (!missing(simple.scale))
+        ioh.list$b.scale=simple.scale[[other.name]]
+      x.simple <- do.call("interaction.positioned", ioh.list)
+## recover()
+      tpg.col.simple <-
+        if (col.by.row)
+          tpg.col
+        else
+          rep(tpg$col, length=length(levels(other.factor)))
+      
+      col.subscripts <-
+        if (col.by.row)
+          rep(seq(length(x.levels)), each=length(levels(other.factor)))
+        else
+          rep(seq(length(levels(other.factor))), length(x.levels))
 
+      if.R(r=
+           panel.bwplot.intermediate.hh(x.simple, y,
+                                        horizontal=FALSE,
+                                        col=tpg.col.simple[col.subscripts],
+                                        box.ratio=box.ratio,
+                                        ...)
+           ,s=
+           panel.bwplot.intermediate.hh(as.numeric(x.simple), y,
+                                        horizontal=FALSE,
+                                        col=tpg.col.simple[col.subscripts],
+                                        box.ratio=box.ratio,
+                                        ...)
+           )
+    }
+    else { ## marginal main effects
+      x.factor <- data.x[, x.name]
+      if.R(r=
+           panel.bwplot.intermediate.hh(x.factor, y,
+                                        horizontal=FALSE,
+                                        box.ratio=box.ratio,
+                                        ...)
+           ,s=
+           panel.bwplot.intermediate.hh(as.numeric(x.factor), y,
+                                        horizontal=FALSE,
+                                        box.ratio=box.ratio,
+                                        ...)
+           )
+    }
+  } 
+  else { ## off-diagonal
+    if (simple) {
+      suff.data <-
+        sufficient(data.frame(y, x, tt=trace.values[subscripts]),
+                   y="y", c("x", "tt"))
 
-  cell <- if.R(r=get("panel.number", pos=sf2),
-               s=get("cell", frame=sys.parent()))
-  which.cell <- if.R(r=as.vector(
-                       matrix(seq(get("plots.per.page", pos=sf2)),
-                              nrow=get("cols.per.page", pos=sf2))
-                              [-1,]),
-                     s=get("which.cell", frame=sys.parent()))
-  this.cell <- match(cell, which.cell)
-  these.labels <- 
-    if.R(r=c(trace.factor=names(factor.levels)[get("row", pos=sf2)],
-           x.factor=names(factor.levels)[get("column", pos=sf2)-1]),
-         s=get("panel.labels", frame=sys.parent())[this.cell,])
-  fac.levels <- factor.levels[[these.labels["trace.factor"]]]$levels
-  x.levels <- factor.levels[[these.labels["x.factor"]]]
-##browser()
-  if (x.levels$class[[1]] == "ordered") {
-     old.warn <- options(warn=-1)
-     if (!any(is.na(as.numeric(x.levels$levels))))
-       x.levels <- as.numeric(x.levels$levels)
-     else x.levels <-  x.levels$levels
-     options(old.warn)
-   }
-   else
-    x.levels <- x.levels$levels
-  if (these.labels["x.factor"] == these.labels["trace.factor"]) {
-    box.par <- list(box.dot=trellis.par.get("box.dot"),
-                    box.rectangle=trellis.par.get("box.rectangle"),
-                    box.umbrella=trellis.par.get("box.umbrella"))
-    box.col <- lapply(box.par, function(x) list(col=x$col))
-   if.R(r={
-     tpg.col <- rep(tpg$col, length=length(fac.levels))
-     tpg.lty <- rep(tpg$lty, length=length(fac.levels))
-     for (i in 1:length(fac.levels)) {
-       for (j in seq(along=box.col))
-         box.col[[j]]$col <- tpg.col[i]
-       box.col$box.rectangle$lty <- tpg.lty[i]
-       trellis.par.set(box.col)
-#        panel.bwplot(x[x==x.levels[i]], y[x==x.levels[i]], horizontal=FALSE)
-#        panel.bwplot(i, y[x==x.levels[i]], horizontal=FALSE)
-       position <- factor.levels[[these.labels["x.factor"]]]$position
-       if (!is.null(position)) {
-         o.p <- (x==position[i])
-         yx <- y[o.p]
-         ix <-  rep(position[i], length(yx))
-         panel.bwplot.hh(ix, yx, horizontal = FALSE,
-                         at=position[i])
-       }
-       else {
-         if (is.numeric(x.levels)) {
-           yx <- y[x == x.levels[i]]
-           ix <- rep(i, length(yx))
-           panel.bwplot.hh(ix, yx, horizontal = FALSE,
-                           at=as.numeric(x.levels[i]))
-         }
-         else {
-           yx <- y[x.levels[x] == x.levels[i]]
-           ix <- rep(i, length(yx))
-           panel.bwplot.hh(ix, yx, horizontal = FALSE,
-                           at=i)
-         }
-       }
-## browser()        
-     }
-     trellis.par.set(lapply(box.par, function(x) list(col=x$col)))
-   }
-        ##       panel.bwplot(x, y, horizontal=FALSE, col=tpg$col[1])
-        ,
-         s={
-    position <- factor.levels[[these.labels["x.factor"]]]$position
-    if (!is.null(position)) {
-      ## browser()
-      o.p <- order(position[match(x, position)])
-      panel.bwplot.intermediate.hh((position[match(x,position)])[o.p], y[o.p],
-                                   transpose=TRUE,
-                                   factor.levels=factor.levels, ...)
+      ioh.list <- list(suff.data$x, suff.data$tt)
+      if (!missing(simple.offset))
+        ioh.list$b.offset <- simple.offset[[trace.name]]
+      if (!missing(simple.scale))
+        ioh.list$b.scale=simple.scale[[trace.name]]
+      x.simple <- do.call("interaction.positioned", ioh.list)
+
+      if (missing(se) || (is.logical(se) && !se))
+        panel.intxplot(y=suff.data$y,
+                       x=x.simple,
+                       subscripts=seq(length(suff.data$y)),
+                       groups=suff.data$tt,
+                       offset.use=FALSE,
+                       rug.use=TRUE,
+                       ...)
+      else {
+        if (is.logical(se))
+          suff.data.se <- suff.data$sd/sqrt(suff.data$nobs)
+        else {
+          suff.data.se <- eval(se, local=suff.data)
+        }
+        panel.intxplot(y=suff.data$y,
+                       x=x.simple,
+                       subscripts=seq(length(suff.data$y)),
+                       groups=suff.data$tt,
+                       offset.use=FALSE,
+                       rug.use=TRUE,
+                       se=suff.data.se,
+                       ...)
+      }
     }
     else {
-      if (is.numeric(x.levels))
-        panel.bwplot.intermediate.hh(as.numeric(x), y, transpose=TRUE,
-                                   factor.levels=factor.levels, ...)
-      else
-        panel.bwplot.intermediate.hh(x, y, transpose=TRUE,
-                                   factor.levels=factor.levels, ...)
+      tab <- tapply(y, list(x, trace.values[subscripts]), fun)
+      su.x <- sort(unique(x))
+      if.R(r={}, s=panel.lines <- lines)
+      for (j in 1:ncol(tab))
+        panel.lines(x=su.x, y=tab[,j], col=tpg.col[j], lty=tpg.lty[j])
     }
-})
-  }
-  else {
-    tab <- tapply(y, list(x, trace.values[subscripts]), fun)
-    su.x <- sort(unique(x))
-    tpg2 <- trellis.par.get("superpose.line")
-    tpg2.col <- rep(tpg2$col, length=ncol(tab))
-    tpg2.lty <- rep(tpg2$lty, length=ncol(tab))
-    if.R(r=for (j in 1:ncol(tab))
-         llines(x=su.x, y=tab[,j], col=tpg2.col[j], lty=tpg2.lty[j]),
-         ##panel.linejoin(x, y, horizontal=FALSE),
-         s=
-    ## ## from interaction.plot:
-    ## tab <-
-    ##   tapply(response,
-    ##          list(unclass(x.factor), unclass(trace.factor)), fun)
-    matlines(su.x, tab, col=tpg$col, lty=tpg$lty))
   }
 
-  if (row==1 && column>1) {
-    x.center <- mean(current.panel.limits()$xlim)
-    ylim <- current.panel.limits()$ylim
-    y.bottom <- ylim[1]-.2*diff(ylim)
-    old.clip <- trellis.par.set(clip=list(panel="off"))
-    panel.text(labels=these.labels["x.factor"],
-               x=x.center,
-               y=y.bottom, srt=0, adj=1, cex=.9)
-    trellis.par.set(old.clip)
+
+  
+  ## x labels
+  if (row.panel==1) {
+    if.R(r={},
+         s={
+           axis(1, at=x.position, labels=x.levels)
+           mtext(x.name, side=1, line=2, at=mean(par()$usr[1:2]))
+          })
+}
+
+  ## trace key
+  if (column.panel==1) {
+
+    key.list <- list(title=trace.name,
+                     cex.title=1,
+                     corner=c(.5,.5), border=TRUE,
+                     text=list(text=trace.levels, cex=.8),
+                     lines=list(col=tpg.col, lty=tpg.lty, lwd=tpg.lwd))
+    key.list[names(key.in)] <- key.in
+    if.R(r={},
+         s={
+           key.list$x <- par()$usr[1]-.6*diff(par()$usr[1:2])
+           do.call("key", key.list)
+         }
+         )
   }
 
-  if (column==cols.per.page) {
-    y.center <- mean(current.panel.limits()$ylim)
-    xlim <- current.panel.limits()$xlim
-    x.right <- xlim[2]+.2*diff(xlim)
-    old.clip <- trellis.par.set(clip=list(panel="off"))
-    panel.text(labels=responselab,
-               x=x.right,
-               y=y.center, srt=0, adj=1, cex=.9)
-    trellis.par.set(old.clip)
-    ## mtext(responselab, side=4, line=3, at=y.center, srt=0, adj=1, cex=.9)
+
+  ## y label
+  if (column.panel==cols.per.page) {
+    if.R(r={},
+         s={
+           mtext(responselab, side=4, line=3, at=mean(par()$usr[3:4]))
+         }
+         )
   }
 }
+
+
+axis.i2wt <-
+  function(side, scales, ...)
+{
+  axis.options <- lattice.getOption("axis.options")
+
+  tcL <- trellis.currentLayout()
+  rows.per.page <- dim(tcL)[1]
+  cols.per.page <- dim(tcL)[2]
+  cell <- panel.number()
+  row.panel <- row(tcL)[tcL==cell]
+  column.panel <- col(tcL)[tcL==cell]
+  
+  if (side == "bottom")
+    {
+      if (row.panel == 1)
+        {
+
+          axis.options <- axis.options$bottom
+          at2     <- axis.options$at2                     
+          labels2 <- axis.options$labels2                 
+          rot2    <- axis.options$rot2
+          ticks2  <- axis.options$ticks2
+          at3     <- axis.options$at3                     
+          labels3 <- axis.options$labels3                 
+          rot3    <- axis.options$rot3
+          ticks3  <- axis.options$ticks3
+          if (is.null(rot2)) rot2 <- 0
+          if (is.null(rot3)) rot3 <- 0
+          if (is.null(ticks2)) ticks2 <- !is.null(labels2)
+          if (is.null(ticks3)) ticks3 <- FALSE
+
+          axis.units <- lattice.getOption("axis.units")$outer$bottom
+          
+          ## space occupied by standard set of ticks
+          tick.units <-
+            ## if (is.null(scales$at)) unit(0, "lines")
+            ## else
+              with(axis.units$tick, unit(scales$tck * x, units))
+          
+          ## space occupied by standard set of labels, assume 1.2
+          ## lines, but we have enough information to compute
+          ## explicitly (see how 'lab.grob' is computed in layout.R)
+          
+          label.units <-
+            if (is.null(scales$at) || !scales$at) unit(0, "lines")
+            else unit(1.2, "lines")
+          
+          ## want second set of ticks to extend beyond this.
+          
+          if (!is.null(at2))
+            at2i <-
+              if (is.list(at2))
+                at2[[column.panel]]
+              else at2
+          
+          if (!is.null(labels2))
+            labels2i <-
+              if (is.list(labels2))
+                labels2[[column.panel]]
+              else labels2
+
+          labels2.units <-
+            if (!is.null(at2) && !is.null(labels2)) 
+              heightDetails(textGrob(unlist(labels2), rot = rot2,
+                                     x=seq(along=unlist(labels2)),
+                                     just = if (rot2==90)
+                                     c("right", "center")
+                                     else c("center", "top")))
+            else
+              unit(0, "lines")
+
+          if (ticks2 && !is.null(at2))
+            grid.segments(x0 = unit(at2i, "native"),
+                          x1 = unit(at2i, "native"),
+                          y0 = unit(0, "npc"),
+                          y1 = unit(0, "npc") - tick.units -
+                          label.units)
+          
+          if (!is.null(at2) && !is.null(labels2))
+            grid.text(labels2i, rot = rot2,
+                      x = unit(at2i, "native"),
+                      y = unit(0, "npc") - tick.units - label.units -
+                      unit(1, "mm"),
+                      just = if (rot2==90) c("right", "center") else c("center", "top"))
+          
+          ## other set of labels (without ticks)
+          
+          if (ticks3 && !is.null(at3))
+            grid.segments(x0 = unit(at3, "native"),
+                          x1 = unit(at3, "native"),
+                          y0 = unit(0, "npc"),
+                          y1 = unit(0, "npc") - tick.units -
+                          label.units - unit(1, "mm"))
+
+          if (!is.null(at3) && !is.null(labels3))
+            grid.text(labels3, rot=rot3,
+                      x = unit(at3, "native"),
+                      y = unit(0, "npc") - tick.units - label.units -
+                      labels2.units - unit(2, "mm"),
+                      just = c("center", "top"))
+          if (is.null(at3) && !is.null(labels3))
+            grid.text(labels3[column.panel], rot=rot3,
+                      y = unit(0, "npc") - tick.units - label.units -
+                      labels2.units - unit(2, "mm"),
+                      just = c("center", "top"))
+        }
+    }
+  
+  if (side == "right")
+    {
+      if (column.panel == cols.per.page)
+        {
+          axis.options <- axis.options$right
+          at2     <- axis.options$at2                     
+          labels2 <- axis.options$labels2                 
+          rot2    <- axis.options$rot2
+          ticks2  <- axis.options$ticks2
+          at3     <- axis.options$at3                     
+          labels3 <- axis.options$labels3                 
+          rot3    <- axis.options$rot3
+          ticks3  <- axis.options$ticks3
+          if (is.null(rot2)) rot2 <- 0
+          if (is.null(rot3)) rot3 <- 0
+          if (is.null(ticks2)) ticks2 <- !is.null(labels2)
+          if (is.null(ticks3)) ticks3 <- FALSE
+
+          axis.units <- lattice.getOption("axis.units")$outer$right
+  
+          ## space occupied by standard set of ticks
+          tick.units <-
+            ## if (is.null(scales$at)) unit(0, "lines")
+            ## else
+              with(axis.units$tick, unit(scales$tck * x, units))
+          
+          ## space occupied by standard set of labels, assume 1.2
+          ## lines, but we have enough information to compute
+          ## explicitly (see how 'lab.grob' is computed in layout.R)
+          
+          label.units <-
+            if (is.null(scales$at) || !scales$at) unit(0, "lines")
+            else unit(1.2, "lines")
+          
+          ## want second set of ticks to extend beyond this.
+          
+          if (!is.null(at2))
+            at2i <-
+              if (is.list(at2))
+                at2[[row.panel]]
+              else at2
+          
+          if (!is.null(labels2))
+            labels2i <-
+              if (is.list(labels2))
+                labels2[[row.panel]]
+              else labels2
+
+          labels2.units <-
+            if (## !is.null(at2) &&  ## Not the same as bottom
+                !is.null(labels2))
+              widthDetails(textGrob(unlist(labels2), rot = rot2,
+                                    y=seq(along=unlist(labels2)),
+                                    just = if (rot2==90)
+                                    c("center", "center")
+                                    else c("left", "center")))
+            else
+              unit(0, "lines")
+
+          right.margin <- unit(current.panel.limits()$xlim[2],"native")
+          if (FALSE)  ## (ticks2 && !is.null(at2))  ## not the same
+            grid.segments(y0 = unit(at2i, "native"),
+                          y1 = unit(at2i, "native"),
+                          x0 = right.margin,
+                          x1 = right.margin + tick.units +
+                          label.units)
+          
+          if (FALSE)  ## (!is.null(at2) && !is.null(labels2))  ## not the same
+            grid.text(labels2i, rot = rot2,
+                      y = unit(at2i, "native"),
+                      x = right.margin + tick.units + label.units +
+                      unit(1, "mm"),
+                      just = if (rot2==90) c("center", "center") else c("left", "center"))
+          
+          ## other set of labels (without ticks)
+          
+          if (ticks3 && !is.null(at3))
+            grid.segments(y0 = unit(at3, "native"),
+                          y1 = unit(at3, "native"),
+                          x0 = right.margin,
+                          x1 = right.margin + tick.units +
+                          label.units + unit(1, "mm"))
+
+          if (!is.null(at3) && !is.null(labels3))
+            grid.text(labels3, rot=rot3,
+                      y = unit(at3, "native"),
+                      x = right.margin + tick.units + label.units +
+                      labels2.units + unit(2, "mm"),
+                      just = c("left", "top"))
+          if (is.null(at3) && !is.null(labels3))
+            grid.text(labels3[row.panel], rot=rot3,
+                      x = right.margin + tick.units + label.units +
+                      labels2.units + unit(2, "mm"),
+                      just = c("left", "top"))
+        }
+    }
+  axis.default(side = side, scales = scales, ...)
+}
+
+
+legendGrob2wt <-   function(...) ## ...is key1, key2, etc
+{
+  keys <- rev(list(...))
+  
+  ## rev is needed because grid and lattice count rows differently (but
+  ## only when as.table = FALSE -- you will need to deal with this
+  ## somehow, possibly by capturing as.table in your wrapper)
+  
+  nkeys <- length(keys)
+  key.widths <-
+    lapply(keys,
+           function(key) unit(1, "grobwidth", data = list(key)))
+  key.layout <-
+    grid.layout(nrow = nkeys, ncol = 1,
+                heights = unit(1, "null"),
+                widths = do.call(max, key.widths),
+                respect = TRUE)
+  key.gf <- frameGrob(layout = key.layout)
+  for (i in seq_len(nkeys))
+    {
+      key.gf <- placeGrob(key.gf, keys[[i]], row = i, col = 1)
+    }
+  key.gf
+}
+
+## source("~/HH-R.package/HH/R/interaction2wt.R")
+## source("~/HH-R.package/HH/R/panel.interaction2wt.R")
+## trace(axis.i2wt, exit=recover)

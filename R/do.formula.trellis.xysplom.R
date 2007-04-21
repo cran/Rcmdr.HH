@@ -1,5 +1,6 @@
 "do.formula.trellis.xysplom" <-
 function(formula, data, na.action=na.pass) {
+  ## based on S-Plus do.formula.trellis
   deparen <- function(expr) {
     ## removes all parentheses from an expression, may be overkill here, 
     ## deparse-parse cycle (as in vi()) changes x~y|z to x~(y|z) and the

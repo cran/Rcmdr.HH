@@ -1,0 +1,38 @@
+Date: Wed 28 Feb 22:23:37 EST 2007
+From: Balasubramanian Narasimhan <naras@stanford.edu> Add To Address Book | This is Spam 
+Subject: Re: Invitation for a presentation at the Interface Conference in Philadelphia 
+To: "Richard M. Heiberger" <rmh@temple.edu> 
+
+
+Hi Rich,
+Here is my title and abstract:
+
+Disseminating Statistical Methodology and Results via R and Excel: Two 
+Examples
+
+            Balasubramanian Narasimhan
+            Stanford University
+
+It is often the case that a colloboration with a colleague in need of
+statistical help leads to the development of methodology or tool for
+doing the statisical analysis.  Increasingly, the implementation of
+the method or tool is in the widely used open source package R. The
+accesibility of the code or tool that is developed can be
+significantly enhanced by wrapping the implementation in an interface
+such as Excel that is widely used and familiar to users. In this talk
+I will present two examples, one involving the analysis of Bone
+Mineral Density data where the modelling is done behind the scenes by
+R, and another, a widely used software in microarray gene expression
+analysis, where once again the computation is done in R but the data
+and results are available in Excel.
+
+
+
+Richard M. Heiberger wrote:
+> Hi Naras,
+>
+> I need the exact title and abstract.  We are putting out
+> the second announcement.
+>
+> Rich
+>   

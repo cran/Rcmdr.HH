@@ -48,7 +48,7 @@ function (x, y, box.ratio = 1, horizontal = TRUE, pch = box.dot$pch,
         x.levels <- seq(along=levels(x))
       yx <- y[x.levels[x] == x.levels[i]]
       ii <- rep(i, length(yx))
-      panel.bwplot.hh(ii, yx, horizontal = F,
+      panel.bwplot.hh(ii, yx, horizontal = FALSE,
                       at=if (is.numeric(x.levels)) x.levels[i] else i )
     }
   } 
