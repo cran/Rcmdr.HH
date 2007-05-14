@@ -1,4 +1,12 @@
-.First.lib <- function(lib, pkg) {
-  closeCommander(exitQ=FALSE)
-  Commander.HH()
+.First.lib <- function(libname, pkgname){
+  if (!interactive()) return()
+  Rcmdr <- options()$Rcmdr
+  plugins <- Rcmdr$plugins
+  if ((!pkgname %in% plugins) && !getRcmdr("autoRestart")) {
+    Rcmdr$plugins <- c(plugins, pkgname)
+    options(Rcmdr=Rcmdr)
+    closeCommander(ask=FALSE, ask.save=TRUE)
+    Commander()
+  }
 }
+
